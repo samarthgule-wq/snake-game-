@@ -1,0 +1,9 @@
+{
+  "name": "snake",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test": "node test/run-tests.js"
+  }
+}
