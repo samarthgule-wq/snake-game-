@@ -8,10 +8,15 @@ The application uses HTML5 Canvas for rendering the game, lightweight CSS for st
  **Key Features**
 
 Modular JavaScript ES Modules architecture
+<br>
 Canvas-based rendering for smooth gameplay
+<br>
 Separate modules for game logic, rendering, and input handling
+<br>
 Lightweight Node.js server setup
+<br>
 Organized project structure for maintainability
+<br>
 Simple test runner for validating functionality
 
 **Tech Stack**
