@@ -17,21 +17,29 @@ Simple test runner for validating functionality
 **Tech Stack**
 
 *_JavaScript (ES Modules)
+<br>
 *_HTML5 Canvas
+<br>
 *_CSS
+<br>
 *_JSON (Project configuration)
+<br>
 *_Node.js
 
 📂 Project Structure
 
 public/
  ├── snake/        # Game modules (logic, rendering, input)
+ <br>
  ├── index.html    # Main game page
+ <br>
  └── styles.css    # Game styling
+ <br>
 
 server.mjs         # Local development server
 test/run-tests.js  # Test runner
 package.json       # Project configuration
+<br>
 
 The purpose of this project is to demonstrate modular JavaScript architecture, game development fundamentals, and clean project structuring using modern web technologies.
 
