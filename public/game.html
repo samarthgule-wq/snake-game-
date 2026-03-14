@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake | Game</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="topLeft">
+          <button id="btnBack" class="btn retroBtn btnSmall" type="button">Back</button>
+          <div class="title">Snake</div>
+        </div>
+        <div class="stats">
+          <span>Score:</span>
+          <strong id="score">0</strong>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="Snake game">
+        <canvas id="board" width="400" height="400"></canvas>
+
+        <div id="overlay" class="overlay" hidden>
+          <div id="overlayCard" class="overlayCard">
+            <div id="overlayTitle" class="overlayTitle"></div>
+            <div id="overlayHint" class="overlayHint"></div>
+            <div class="menuButtons">
+              <button id="btnOverlayRestart" class="btn retroBtn" type="button">Restart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Controls">
+        <div class="controlRow">
+          <button id="btnRestart" class="btn" type="button">Restart (R)</button>
+          <button id="btnPause" class="btn" type="button">Pause (Space)</button>
+        </div>
+        <div class="dpad" aria-label="Direction pad">
+          <button id="btnUp" class="btn" type="button">Up</button>
+          <div class="controlRow">
+            <button id="btnLeft" class="btn" type="button">Left</button>
+            <button id="btnRight" class="btn" type="button">Right</button>
+          </div>
+          <button id="btnDown" class="btn" type="button">Down</button>
+        </div>
+        <div class="help">
+          Keyboard: arrows or WASD. Pause: Space. Restart: R.
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/snake/app.js"></script>
+  </body>
+</html>

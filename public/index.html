@@ -3,51 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snake</title>
+    <title>Snake | Menu</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="app">
-      <header class="topbar">
-        <div class="title">Snake</div>
-        <div class="stats">
-          <span>Score:</span>
-          <strong id="score">0</strong>
+    <main class="landing" aria-label="Snake menu">
+      <section class="landingCard">
+        <div class="menuTitle">SNAKE</div>
+        <div class="menuMeta">
+          <div>Highest Score: <strong id="highScore">0</strong></div>
         </div>
-      </header>
-
-      <section class="stage" aria-label="Snake game">
-        <canvas id="board" width="400" height="400"></canvas>
-        <div id="overlay" class="overlay" hidden>
-          <div class="overlayCard">
-            <div id="overlayTitle" class="overlayTitle">Game Over</div>
-            <div id="overlayHint" class="overlayHint">
-              Press R to restart.
-            </div>
-          </div>
+        <div class="menuButtons">
+          <button id="btnStart" class="btn retroBtn" type="button">Start</button>
+          <button id="btnResetHigh" class="btn retroBtn" type="button">Reset High Score</button>
+          <button id="btnExit" class="btn retroBtn" type="button">Exit</button>
         </div>
-      </section>
-
-      <section class="controls" aria-label="Controls">
-        <div class="controlRow">
-          <button id="btnRestart" class="btn" type="button">Restart (R)</button>
-          <button id="btnPause" class="btn" type="button">Pause (Space)</button>
-        </div>
-        <div class="dpad" aria-label="Direction pad">
-          <button id="btnUp" class="btn" type="button">Up</button>
-          <div class="controlRow">
-            <button id="btnLeft" class="btn" type="button">Left</button>
-            <button id="btnRight" class="btn" type="button">Right</button>
-          </div>
-          <button id="btnDown" class="btn" type="button">Down</button>
-        </div>
+        <div id="menuHint" class="menuHint" aria-live="polite"></div>
         <div class="help">
-          Keyboard: arrows or WASD. Pause: Space. Restart: R.
+          Controls in game: arrows/WASD. Pause: Space. Restart: R.
         </div>
       </section>
     </main>
 
-    <script type="module" src="/snake/app.js"></script>
+    <script type="module" src="/landing.js"></script>
   </body>
 </html>
-

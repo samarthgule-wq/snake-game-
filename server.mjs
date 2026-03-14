@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const publicDir = path.join(__dirname, "public");
-const port = Number(process.env.PORT || 5173);
+const basePort = Number(process.env.PORT || 5173);
 
 const mimeByExt = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -26,7 +26,7 @@ function safeResolvePublic(requestPath) {
   return path.join(publicDir, normalized);
 }
 
-const server = http.createServer(async (req, res) => {
+async function handler(req, res) {
   try {
     if (!req.url) {
       res.writeHead(400);
@@ -59,10 +59,31 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(404);
     res.end("Not found");
   }
-});
+}
 
-server.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Snake dev server: http://localhost:${port}`);
-});
+function listenWithFallback(startPort, maxTries = 20) {
+  let attempt = 0;
 
+  const tryListen = () => {
+    const port = startPort + attempt;
+    const server = http.createServer(handler);
+
+    server.on("error", (err) => {
+      if (err && err.code === "EADDRINUSE" && attempt < maxTries) {
+        attempt += 1;
+        tryListen();
+        return;
+      }
+      throw err;
+    });
+
+    server.listen(port, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Snake dev server: http://localhost:${port}`);
+    });
+  };
+
+  tryListen();
+}
+
+listenWithFallback(basePort);

@@ -9,6 +9,7 @@
   --food: #ff5a6a;
   --btn: #1d2230;
   --btnBorder: #2a3144;
+  --retro: #d7ff67;
 }
 
 * {
@@ -28,6 +29,31 @@ body {
     sans-serif;
 }
 
+.landing {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.landingCard {
+  width: min(420px, 96%);
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 6px
+    );
+  border: 1px solid color-mix(in srgb, var(--retro) 35%, var(--btnBorder));
+  border-radius: 14px;
+  padding: 18px 18px;
+  box-shadow: 0 0 0 2px rgba(215, 255, 103, 0.12);
+  text-align: center;
+}
+
 .app {
   width: min(720px, 100%);
   margin: 0 auto;
@@ -44,6 +70,12 @@ body {
   background: color-mix(in srgb, var(--panel) 92%, black 8%);
   border: 1px solid var(--btnBorder);
   border-radius: 12px;
+}
+
+.topLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .title {
@@ -79,17 +111,69 @@ canvas {
   inset: 12px;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, 0.45);
+  background: transparent;
   border-radius: 10px;
+  pointer-events: none;
 }
 
-.overlayCard {
-  background: rgba(23, 26, 33, 0.92);
+/*.overlayCard {
+  background: rgba(76, 114, 203, 0.92);
   border: 1px solid var(--btnBorder);
   border-radius: 12px;
   padding: 14px 16px;
   text-align: center;
   width: min(320px, 90%);
+  pointer-events: auto;
+}*/
+
+.overlayCard.popupOnly {
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+}
+
+.overlayCard.popupOnly .menuButtons {
+  margin-top: 0;
+}
+
+.overlayCard.popupOnly .retroBtn {
+  background: rgba(29, 34, 48, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.menuTitle {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--retro);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(215, 255, 103, 0.25);
+  margin-bottom: 8px;
+  font-size: 34px;
+}
+
+.menuMeta {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.menuButtons {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.menuHint {
+  margin-top: 10px;
+  min-height: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.retroBtn {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 1px;
+  border-color: color-mix(in srgb, var(--retro) 35%, var(--btnBorder));
 }
 
 .overlayTitle {
@@ -128,6 +212,11 @@ canvas {
   font-weight: 600;
 }
 
+.btnSmall {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
 .btn:active {
   transform: translateY(1px);
 }
@@ -148,4 +237,3 @@ canvas {
     padding: 24px;
   }
 }
-
