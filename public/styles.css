@@ -34,24 +34,46 @@ body {
   display: grid;
   place-items: center;
   padding: 20px;
+  background:
+    radial-gradient(1200px 680px at 50% -10%, rgba(255, 150, 80, 0.771), rgba(0, 0, 0, 0) 55%),
+    radial-gradient(900px 520px at 20% 20%, rgba(120, 80, 55, 0.501), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #140b07 0%, #0f1115 60%, #0f1115 100%);
 }
 
 .landingCard {
   width: min(420px, 96%);
+  background: linear-gradient(180deg, rgba(15, 11, 9, 0.84), rgba(12, 14, 18, 0.9));
+  border: 1px solid rgb(255, 95, 95);
+  border-radius: 14px;
+  padding: 18px 18px;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.22),
+    0 18px 60px rgba(0, 0, 0, 0.55);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.landingCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    radial-gradient(900px 280px at 50% -10%, rgba(255, 149, 80, 0.38), rgba(0, 0, 0, 0) 60%),
     repeating-linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.05) 0px,
-      rgba(255, 255, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
       rgba(0, 0, 0, 0) 2px,
       rgba(0, 0, 0, 0) 6px
     );
-  border: 1px solid color-mix(in srgb, var(--retro) 35%, var(--btnBorder));
-  border-radius: 14px;
-  padding: 18px 18px;
-  box-shadow: 0 0 0 2px rgba(215, 255, 103, 0.12);
-  text-align: center;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.landingCard > * {
+  position: relative;
+  z-index: 1;
 }
 
 .app {
@@ -143,13 +165,43 @@ canvas {
 }
 
 .menuTitle {
-  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  position: relative;
+  font-family: Impact, Haettenschweiler, "Arial Black", "Franklin Gothic Heavy",
+    ui-sans-serif, system-ui, sans-serif;
   font-weight: 900;
-  letter-spacing: 4px;
-  color: var(--retro);
-  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 18px rgba(215, 255, 103, 0.25);
-  margin-bottom: 8px;
-  font-size: 34px;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  font-size: 46px;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, #d7d7d7 58%, #a9a9a9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 5px rgba(0, 0, 0, 0.92);
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 22px rgba(255, 149, 80, 0.16);
+}
+
+.menuTitle::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  transform: translate(5px, 6px);
+  color: rgba(0, 0, 0, 0.9);
+  -webkit-text-stroke: 0 transparent;
+  text-shadow: none;
+}
+
+.menuSubtitle {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 1px;
+  color: rgba(255, 170, 95, 0.9);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  font-size: 12px;
 }
 
 .menuMeta {
@@ -173,7 +225,7 @@ canvas {
 .retroBtn {
   font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
   letter-spacing: 1px;
-  border-color: color-mix(in srgb, var(--retro) 35%, var(--btnBorder));
+  border-color: rgba(255, 170, 95, 0.35);
 }
 
 .overlayTitle {
