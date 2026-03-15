@@ -12,6 +12,7 @@ Classic Snake: grid movement, growing snake, food spawn, score, game-over, resta
 
 - Menu (landing): `/` (`public/index.html`)
 - Game: `/game.html` (`public/game.html`)
+- Advanced (canvas): `/advanced/` (`public/advanced/index.html`)
 
 ## Controls (Game)
 
@@ -22,4 +23,3 @@ Classic Snake: grid movement, growing snake, food spawn, score, game-over, resta
 ## Tests
 
 - `npm test`
-
