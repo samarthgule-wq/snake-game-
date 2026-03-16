@@ -27,6 +27,89 @@ const btnRight = document.getElementById("btnRight");
 setupCanvas(canvas, GRID_W, GRID_H, CELL);
 
 let state = createGame({ width: GRID_W, height: GRID_H, initialLength: 3, rng: Math.random });
+let lastScore = state.score;
+let crashPlayed = false;
+
+// Simple SFX (Web Audio API), no external audio files.
+let audioCtx = null;
+let audioMaster = null;
+let audioUnlocked = false;
+
+function ensureAudio() {
+  if (audioCtx) return true;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return false;
+  audioCtx = new Ctx();
+  audioMaster = audioCtx.createGain();
+  audioMaster.gain.value = 0.12;
+  audioMaster.connect(audioCtx.destination);
+  return true;
+}
+
+async function unlockAudio() {
+  if (audioUnlocked) return;
+  if (!ensureAudio()) return;
+  try {
+    if (audioCtx.state !== "running") await audioCtx.resume();
+    audioUnlocked = audioCtx.state === "running";
+  } catch {
+    // Ignore
+  }
+}
+
+function playTone({ type = "sine", f0 = 440, f1 = 440, duration = 0.12, gain = 0.6 } = {}) {
+  if (!audioUnlocked || !audioCtx || !audioMaster) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(f0, now);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(20, f1), now + duration);
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  osc.connect(g);
+  g.connect(audioMaster);
+  osc.start(now);
+  osc.stop(now + duration + 0.02);
+}
+
+function playNoiseBurst({ duration = 0.10, gain = 0.5 } = {}) {
+  if (!audioUnlocked || !audioCtx || !audioMaster) return;
+  const now = audioCtx.currentTime;
+  const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i += 1) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "highpass";
+  filter.frequency.value = 180;
+
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  src.connect(filter);
+  filter.connect(g);
+  g.connect(audioMaster);
+  src.start(now);
+  src.stop(now + duration + 0.02);
+}
+
+function sfxEat() {
+  playTone({ type: "triangle", f0: 420, f1: 840, duration: 0.09, gain: 0.55 });
+  playTone({ type: "sine", f0: 760, f1: 560, duration: 0.07, gain: 0.25 });
+}
+
+function sfxCrash() {
+  playNoiseBurst({ duration: 0.12, gain: 0.55 });
+  playTone({ type: "sawtooth", f0: 160, f1: 70, duration: 0.18, gain: 0.45 });
+}
 
 function updateHighScoreIfNeeded() {
   const raw = localStorage.getItem("snakeHighScore");
@@ -68,6 +151,8 @@ function frame() {
 function doRestart() {
   updateHighScoreIfNeeded();
   state = restartGame(state, { rng: Math.random });
+  lastScore = state.score;
+  crashPlayed = false;
   frame();
 }
 
@@ -108,18 +193,21 @@ function onKeyDown(e) {
   if (dir) {
     e.preventDefault();
     setDir(dir);
+    unlockAudio();
     return;
   }
 
   if (e.key === " " || e.key === "Spacebar") {
     e.preventDefault();
     doPauseToggle();
+    unlockAudio();
     return;
   }
 
   if (e.key === "r" || e.key === "R") {
     e.preventDefault();
     doRestart();
+    unlockAudio();
   }
 }
 
@@ -127,12 +215,14 @@ function buttonPress(button, action) {
   button.addEventListener("click", (e) => {
     e.preventDefault();
     action();
+    unlockAudio();
   });
 
   // Helps on mobile: prevent accidental double-tap zoom/scroll intent.
   button.addEventListener("pointerdown", (e) => {
     e.preventDefault();
     action();
+    unlockAudio();
   });
 }
 
@@ -152,10 +242,17 @@ if (btnBack) {
 }
 
 window.addEventListener("keydown", onKeyDown, { passive: false });
+window.addEventListener("pointerdown", unlockAudio, { passive: true, once: true });
 
 setInterval(() => {
   state = tick(state, Math.random);
+  if (state.score > lastScore) sfxEat();
+  lastScore = state.score;
   if (state.status === "game_over") updateHighScoreIfNeeded();
+  if (state.status === "game_over" && !crashPlayed) {
+    sfxCrash();
+    crashPlayed = true;
+  }
   frame();
 }, TICK_MS);
 

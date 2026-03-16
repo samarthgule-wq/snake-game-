@@ -17,6 +17,87 @@ const overlayEl = document.getElementById("overlay");
 
 const BEST_KEY = "snakeHighScore";
 
+// Audio (Web Audio API). No external assets; we synthesize simple SFX.
+let audioCtx = null;
+let audioMaster = null;
+let audioUnlocked = false;
+
+function ensureAudio() {
+  if (audioCtx) return true;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return false;
+  audioCtx = new Ctx();
+  audioMaster = audioCtx.createGain();
+  audioMaster.gain.value = 0.12;
+  audioMaster.connect(audioCtx.destination);
+  return true;
+}
+
+async function unlockAudio() {
+  if (audioUnlocked) return;
+  if (!ensureAudio()) return;
+  try {
+    if (audioCtx.state !== "running") await audioCtx.resume();
+    audioUnlocked = audioCtx.state === "running";
+  } catch {
+    // Ignore; browser may block until a user gesture.
+  }
+}
+
+function playTone({ type = "sine", f0 = 440, f1 = 440, duration = 0.12, gain = 0.6 } = {}) {
+  if (!audioUnlocked || !audioCtx || !audioMaster) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(f0, now);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(20, f1), now + duration);
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  osc.connect(g);
+  g.connect(audioMaster);
+  osc.start(now);
+  osc.stop(now + duration + 0.02);
+}
+
+function playNoiseBurst({ duration = 0.10, gain = 0.5 } = {}) {
+  if (!audioUnlocked || !audioCtx || !audioMaster) return;
+  const now = audioCtx.currentTime;
+  const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i += 1) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "highpass";
+  filter.frequency.value = 180;
+
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  src.connect(filter);
+  filter.connect(g);
+  g.connect(audioMaster);
+  src.start(now);
+  src.stop(now + duration + 0.02);
+}
+
+function sfxEat() {
+  playTone({ type: "triangle", f0: 420, f1: 840, duration: 0.09, gain: 0.55 });
+  playTone({ type: "sine", f0: 760, f1: 560, duration: 0.07, gain: 0.25 });
+}
+
+function sfxCrash() {
+  playNoiseBurst({ duration: 0.12, gain: 0.55 });
+  playTone({ type: "sawtooth", f0: 160, f1: 70, duration: 0.18, gain: 0.45 });
+}
+
 // Mechanics (grid)
 const GRID_W = 26;
 const GRID_H = 18;
@@ -25,7 +106,7 @@ const GRID_H = 18;
 // - From score 5 to 9, keep speed constant
 // - After that, speed only increases every +5 score (10, 15, 20, ...)
 // - Each increase is eased over time to avoid noticeable jumps
-const STEP_START_MS = 250;
+const STEP_START_MS = 300;
 const STEP_BASE_MS = 240;
 const STEP_MIN_MS = 62;
 const STEP_DECREASE_PER_LEVEL_MS = 7; // lower = subtle speed increases
@@ -218,6 +299,7 @@ function step() {
     if (score > getBest()) setBest(score);
     placeFood();
     beginSpeedTransitionIfNeeded();
+    sfxEat();
   }
 
   updateHud();
@@ -228,6 +310,7 @@ function foul() {
   overlayEl.hidden = false;
   if (score > getBest()) setBest(score);
   updateHud();
+  sfxCrash();
 }
 
 function resize() {
@@ -674,15 +757,18 @@ function onKeyDown(e) {
   else return;
 
   e.preventDefault();
+  unlockAudio();
 }
 
 btnRestart.addEventListener("click", (e) => {
   e.preventDefault();
+  unlockAudio();
   resetGame();
 });
 
 window.addEventListener("keydown", onKeyDown, { passive: false });
 window.addEventListener("resize", resize);
+window.addEventListener("pointerdown", unlockAudio, { passive: true, once: true });
 
 resize();
 resetGame();
