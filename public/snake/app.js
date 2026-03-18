@@ -212,15 +212,20 @@ function onKeyDown(e) {
 }
 
 function buttonPress(button, action) {
+  let ignoreClickUntil = 0;
+
   button.addEventListener("click", (e) => {
+    if (performance.now() < ignoreClickUntil) return;
     e.preventDefault();
     action();
     unlockAudio();
   });
 
-  // Helps on mobile: prevent accidental double-tap zoom/scroll intent.
+  // Trigger immediately on touch/pen without double-firing the later click event.
   button.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse") return;
     e.preventDefault();
+    ignoreClickUntil = performance.now() + 400;
     action();
     unlockAudio();
   });

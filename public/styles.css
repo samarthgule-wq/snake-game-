@@ -256,6 +256,7 @@ canvas {
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
+  touch-action: manipulation;
 }
 
 .btnSmall {
