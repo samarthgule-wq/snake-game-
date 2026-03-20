@@ -1,0 +1,533 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: "Exo 2", sans-serif;
+  --panel: rgba(11, 18, 22, 0.74);
+  --panel-strong: rgba(11, 18, 22, 0.92);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: #f4f7f3;
+  --muted: rgba(244, 247, 243, 0.72);
+  --accent: #c9ff6b;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(68, 149, 101, 0.25), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(255, 166, 82, 0.2), transparent 25%),
+    linear-gradient(180deg, #0b1519 0%, #05090d 100%);
+}
+
+button {
+  font: inherit;
+}
+
+.appShell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.screen {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+}
+
+.heroScreen {
+  min-height: calc(100vh - 48px);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+  position: relative;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(127, 255, 154, 0.22), transparent 32%),
+    radial-gradient(circle at 75% 35%, rgba(255, 179, 106, 0.18), transparent 28%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.heroPanel,
+.selectedPanel,
+.hudPanel,
+.boardPanel,
+.levelCard,
+.levelSummary {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+.heroPanel {
+  padding: 42px;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: "Orbitron", sans-serif;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 6.4rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+}
+
+.heroCopy,
+.levelCard p,
+.selectedCopy p,
+.controlsHint,
+.overlayCard p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.heroCopy {
+  max-width: 640px;
+  margin: 18px 0 28px;
+  font-size: 18px;
+}
+
+.heroStats,
+.levelSummary {
+  display: grid;
+  gap: 14px;
+}
+
+.heroStats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 28px;
+}
+
+.heroStats div,
+.levelSummary div,
+.hudStat {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.heroStats span,
+.levelSummary span,
+.hudStat span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.heroStats strong,
+.levelSummary strong,
+.hudStat strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: 0;
+  border-radius: 18px;
+  padding: 14px 22px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  touch-action: manipulation;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #95ff8d, #d0ff71);
+  color: #102514;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(168, 255, 114, 0.28);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover:not(:disabled),
+.levelCard:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.levelCard:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.heroArt {
+  position: relative;
+  min-height: 460px;
+  display: grid;
+  place-items: center;
+}
+
+.snakeHalo {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(133, 255, 156, 0.36), transparent 52%),
+    radial-gradient(circle at 60% 45%, rgba(255, 198, 107, 0.2), transparent 34%);
+  filter: blur(24px);
+}
+
+.snakePreview {
+  position: relative;
+  width: 380px;
+  height: 380px;
+  border-radius: 48% 52% 56% 44% / 38% 58% 42% 62%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at 30% 30%, rgba(127, 255, 154, 0.16), transparent 26%),
+    rgba(9, 15, 18, 0.7);
+  overflow: hidden;
+}
+
+.segment {
+  position: absolute;
+  display: block;
+  width: 116px;
+  height: 72px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #c6ff94, #489b39 72%);
+  box-shadow:
+    inset 0 8px 12px rgba(255, 255, 255, 0.16),
+    0 16px 28px rgba(0, 0, 0, 0.24);
+}
+
+.segment:nth-child(1) {
+  top: 90px;
+  left: 188px;
+  transform: rotate(22deg);
+}
+
+.segment:nth-child(2) {
+  top: 138px;
+  left: 138px;
+  transform: rotate(-20deg);
+}
+
+.segment:nth-child(3) {
+  top: 196px;
+  left: 102px;
+  transform: rotate(30deg);
+}
+
+.segment:nth-child(4) {
+  top: 240px;
+  left: 150px;
+  transform: rotate(-28deg);
+}
+
+.segment:nth-child(5) {
+  top: 282px;
+  left: 212px;
+  width: 82px;
+  transform: rotate(16deg);
+}
+
+.segment.head {
+  width: 138px;
+}
+
+.segment.head::before,
+.segment.head::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #132214;
+  top: 18px;
+}
+
+.segment.head::before {
+  right: 26px;
+}
+
+.segment.head::after {
+  right: 12px;
+}
+
+.segment.tail {
+  width: 92px;
+}
+
+.levelsScreen,
+.gameScreen {
+  display: grid;
+  gap: 22px;
+}
+
+.screenHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.levelSummary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 10px;
+}
+
+.levelsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.levelCard {
+  padding: 22px;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.levelCard.selected {
+  border-color: rgba(149, 255, 141, 0.9);
+  box-shadow: 0 18px 44px rgba(149, 255, 141, 0.18);
+}
+
+.levelCard.locked {
+  filter: saturate(0.3);
+}
+
+.levelBadge,
+.levelState {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.levelMeta,
+.selectedMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.levelMeta span,
+.selectedMeta span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.selectedPanel {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+
+.selectedCopy {
+  max-width: 760px;
+}
+
+.gameLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 22px;
+}
+
+.boardPanel {
+  position: relative;
+  padding: 18px;
+}
+
+.gameCanvas {
+  width: 100%;
+  max-width: 560px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 24px;
+}
+
+.gameOverlay {
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(4, 9, 12, 0.45);
+  border-radius: 28px;
+  transition: opacity 0.2s ease;
+}
+
+.gameOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlayCard {
+  width: min(360px, calc(100% - 24px));
+  padding: 24px;
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  text-align: center;
+}
+
+.overlayTitle {
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-family: "Orbitron", sans-serif;
+}
+
+.overlayActions,
+.controlsPanel {
+  display: grid;
+  gap: 12px;
+}
+
+.overlayActions {
+  margin-top: 18px;
+}
+
+.hudPanel {
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.controlRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.controlsHint kbd {
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 1100px) {
+  .heroScreen,
+  .gameLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .levelsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .appShell {
+    padding: 16px;
+  }
+
+  .heroPanel,
+  .boardPanel,
+  .hudPanel,
+  .selectedPanel {
+    padding: 20px;
+  }
+
+  .heroStats,
+  .levelSummary,
+  .levelsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .selectedPanel,
+  .screenHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .heroArt {
+    min-height: 320px;
+  }
+
+  .snakePreview {
+    width: 290px;
+    height: 290px;
+  }
+
+  .segment:nth-child(1) {
+    top: 68px;
+    left: 140px;
+  }
+
+  .segment:nth-child(2) {
+    top: 108px;
+    left: 100px;
+  }
+
+  .segment:nth-child(3) {
+    top: 154px;
+    left: 76px;
+  }
+
+  .segment:nth-child(4) {
+    top: 194px;
+    left: 114px;
+  }
+
+  .segment:nth-child(5) {
+    top: 234px;
+    left: 164px;
+  }
+}

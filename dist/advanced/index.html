@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Snake</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="hud" aria-label="Score and controls">
+        <div class="brand">
+          <div class="brandTitle">SNAKE</div>
+          <div class="brandSub">Advanced Canvas Edition</div>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Score</div>
+            <div id="score" class="value">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Best</div>
+            <div id="best" class="value">0</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="btnRestart" class="btn" type="button">Restart</button>
+          <a class="btn ghost" href="/">Menu</a>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="Snake game canvas">
+        <canvas id="c"></canvas>
+        <div id="overlay" class="overlay" hidden>
+          <div class="overlayCard">
+            <div class="overlayTitle">Foul</div>
+            <div class="overlayHint">Press Restart or hit Enter</div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="help" aria-label="Help">
+        Arrow keys to move. Avoid walls and yourself. Eat glowing food to grow.
+      </footer>
+    </main>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
+

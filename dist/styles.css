@@ -1,0 +1,286 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --text: #e9edf5;
+  --muted: #9aa3b2;
+  --grid: #232938;
+  --snake: #72e89f;
+  --snakeHead: #a7ffcb;
+  --food: #ff5a6a;
+  --btn: #1d2230;
+  --btnBorder: #2a3144;
+  --retro: #d7ff67;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 800px at 20% 10%, #1c2030 0%, var(--bg) 55%);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+}
+
+.landing {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    radial-gradient(1200px 680px at 50% -10%, rgba(255, 150, 80, 0.771), rgba(0, 0, 0, 0) 55%),
+    radial-gradient(900px 520px at 20% 20%, rgba(120, 80, 55, 0.501), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #140b07 0%, #0f1115 60%, #0f1115 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.landingCard {
+  width: min(420px, 96%);
+  background: linear-gradient(180deg, rgba(15, 11, 9, 0.84), rgba(12, 14, 18, 0.9));
+  border: 1px solid rgb(255, 95, 95);
+  border-radius: 14px;
+  padding: 18px 18px;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.22),
+    0 18px 60px rgba(0, 0, 0, 0.55);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.landingCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 280px at 50% -10%, rgba(255, 149, 80, 0.38), rgba(0, 0, 0, 0) 60%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 6px
+    );
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.landingCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 12px;
+  background: color-mix(in srgb, var(--panel) 92%, black 8%);
+  border: 1px solid var(--btnBorder);
+  border-radius: 12px;
+}
+
+.topLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.title {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.stats {
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.stage {
+  position: relative;
+  background: color-mix(in srgb, var(--panel) 92%, black 8%);
+  border: 1px solid var(--btnBorder);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #0b0d12;
+  border-radius: 10px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 12px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/*.overlayCard {
+  background: rgba(76, 114, 203, 0.92);
+  border: 1px solid var(--btnBorder);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+  width: min(320px, 90%);
+  pointer-events: auto;
+}*/
+
+.overlayCard.popupOnly {
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+}
+
+.overlayCard.popupOnly .menuButtons {
+  margin-top: 0;
+}
+
+.overlayCard.popupOnly .retroBtn {
+  background: rgba(29, 34, 48, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.menuTitle {
+  position: relative;
+  font-family: Impact, Haettenschweiler, "Arial Black", "Franklin Gothic Heavy",
+    ui-sans-serif, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  font-size: 46px;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, #d7d7d7 58%, #a9a9a9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 5px rgba(0, 0, 0, 0.92);
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 22px rgba(255, 149, 80, 0.16);
+}
+
+.menuTitle::before {
+  content: none;
+}
+
+.menuSubtitle {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 1px;
+  color: rgba(255, 170, 95, 0.9);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.menuMeta {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.menuButtons {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.menuHint {
+  margin-top: 10px;
+  min-height: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.retroBtn {
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 1px;
+  border-color: rgba(255, 170, 95, 0.35);
+}
+
+.overlayTitle {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.overlayHint {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.controls {
+  background: color-mix(in srgb, var(--panel) 92%, black 8%);
+  border: 1px solid var(--btnBorder);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.controlRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  appearance: none;
+  background: var(--btn);
+  color: var(--text);
+  border: 1px solid var(--btnBorder);
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  touch-action: manipulation;
+}
+
+.btnSmall {
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.dpad {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.help {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (min-width: 760px) {
+  .app {
+    padding: 24px;
+  }
+}
