@@ -38,7 +38,7 @@ button {
 }
 
 .screen {
-  width: min(1280px, 100%);
+  width: min(1320px, 100%);
   margin: 0 auto;
 }
 
@@ -66,7 +66,8 @@ button {
 .hudPanel,
 .boardPanel,
 .levelCard,
-.levelSummary {
+.levelSummary,
+.snakeCard {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 28px;
@@ -113,13 +114,14 @@ h2 {
 .levelCard p,
 .selectedCopy p,
 .controlsHint,
-.overlayCard p {
+.overlayCard p,
+.snakeCard p {
   color: var(--muted);
   line-height: 1.6;
 }
 
 .heroCopy {
-  max-width: 640px;
+  max-width: 680px;
   margin: 18px 0 28px;
   font-size: 18px;
 }
@@ -190,7 +192,8 @@ h2 {
 
 .primaryButton:hover,
 .secondaryButton:hover:not(:disabled),
-.levelCard:hover:not(:disabled) {
+.levelCard:hover:not(:disabled),
+.snakeCard:hover {
   transform: translateY(-2px);
 }
 
@@ -244,41 +247,12 @@ h2 {
     0 16px 28px rgba(0, 0, 0, 0.24);
 }
 
-.segment:nth-child(1) {
-  top: 90px;
-  left: 188px;
-  transform: rotate(22deg);
-}
-
-.segment:nth-child(2) {
-  top: 138px;
-  left: 138px;
-  transform: rotate(-20deg);
-}
-
-.segment:nth-child(3) {
-  top: 196px;
-  left: 102px;
-  transform: rotate(30deg);
-}
-
-.segment:nth-child(4) {
-  top: 240px;
-  left: 150px;
-  transform: rotate(-28deg);
-}
-
-.segment:nth-child(5) {
-  top: 282px;
-  left: 212px;
-  width: 82px;
-  transform: rotate(16deg);
-}
-
-.segment.head {
-  width: 138px;
-}
-
+.segment:nth-child(1) { top: 90px; left: 188px; transform: rotate(22deg); }
+.segment:nth-child(2) { top: 138px; left: 138px; transform: rotate(-20deg); }
+.segment:nth-child(3) { top: 196px; left: 102px; transform: rotate(30deg); }
+.segment:nth-child(4) { top: 240px; left: 150px; transform: rotate(-28deg); }
+.segment:nth-child(5) { top: 282px; left: 212px; width: 82px; transform: rotate(16deg); }
+.segment.head { width: 138px; }
 .segment.head::before,
 .segment.head::after {
   content: "";
@@ -290,17 +264,9 @@ h2 {
   top: 18px;
 }
 
-.segment.head::before {
-  right: 26px;
-}
-
-.segment.head::after {
-  right: 12px;
-}
-
-.segment.tail {
-  width: 92px;
-}
+.segment.head::before { right: 26px; }
+.segment.head::after { right: 12px; }
+.segment.tail { width: 92px; }
 
 .levelsScreen,
 .gameScreen {
@@ -332,7 +298,8 @@ h2 {
   cursor: pointer;
 }
 
-.levelCard.selected {
+.levelCard.selected,
+.snakeCard.selected {
   border-color: rgba(149, 255, 141, 0.9);
   box-shadow: 0 18px 44px rgba(149, 255, 141, 0.18);
 }
@@ -355,7 +322,8 @@ h2 {
 }
 
 .levelMeta,
-.selectedMeta {
+.selectedMeta,
+.snakeRequirements {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -363,7 +331,9 @@ h2 {
 }
 
 .levelMeta span,
-.selectedMeta span {
+.selectedMeta span,
+.snakeRequirements span,
+.snakeNameRow span {
   padding: 7px 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
@@ -381,6 +351,59 @@ h2 {
 
 .selectedCopy {
   max-width: 760px;
+}
+
+.snakeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.snakeCard {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.snakeSwatch {
+  height: 120px;
+  border-radius: 24px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      var(--s0) 0 22px,
+      var(--s1) 22px 44px,
+      var(--s2) 44px 66px
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+.snakeSwatch::before,
+.snakeSwatch::after {
+  content: "";
+  position: absolute;
+  inset: 24px 18px;
+  border-radius: 999px;
+  border: 4px solid var(--stripe);
+  opacity: 0.55;
+}
+
+.snakeSwatch::after {
+  inset: 48px 32px;
+}
+
+.snakeNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.snakeActions {
+  margin-top: 18px;
 }
 
 .gameLayout {
@@ -464,11 +487,13 @@ h2 {
 
 @media (max-width: 1100px) {
   .heroScreen,
-  .gameLayout {
+  .gameLayout,
+  .snakeCard {
     grid-template-columns: 1fr;
   }
 
-  .levelsGrid {
+  .levelsGrid,
+  .snakeGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -487,7 +512,8 @@ h2 {
 
   .heroStats,
   .levelSummary,
-  .levelsGrid {
+  .levelsGrid,
+  .snakeGrid {
     grid-template-columns: 1fr;
   }
 
@@ -506,28 +532,9 @@ h2 {
     height: 290px;
   }
 
-  .segment:nth-child(1) {
-    top: 68px;
-    left: 140px;
-  }
-
-  .segment:nth-child(2) {
-    top: 108px;
-    left: 100px;
-  }
-
-  .segment:nth-child(3) {
-    top: 154px;
-    left: 76px;
-  }
-
-  .segment:nth-child(4) {
-    top: 194px;
-    left: 114px;
-  }
-
-  .segment:nth-child(5) {
-    top: 234px;
-    left: 164px;
-  }
+  .segment:nth-child(1) { top: 68px; left: 140px; }
+  .segment:nth-child(2) { top: 108px; left: 100px; }
+  .segment:nth-child(3) { top: 154px; left: 76px; }
+  .segment:nth-child(4) { top: 194px; left: 114px; }
+  .segment:nth-child(5) { top: 234px; left: 164px; }
 }
