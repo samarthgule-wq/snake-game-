@@ -54,7 +54,16 @@ function pointKey({ x, y }) {
 }
 
 function canUnlockLevel(level, progress) {
-  return progress.totalApples >= level.unlockApples;
+  return (
+    progress.totalApples >= level.requirements.apples &&
+    progress.coins >= level.requirements.coins &&
+    progress.bestScore >= level.requirements.rank &&
+    progress.purchasedSkins.includes(level.requirements.snakeId)
+  );
+}
+
+function getSnakeName(snakeId) {
+  return SNAKES.find((snake) => snake.id === snakeId)?.name ?? "Unknown Snake";
 }
 
 function forbiddenStartZone() {
@@ -194,7 +203,8 @@ function roundRect(ctx, x, y, width, height, radius) {
   }
 }
 
-function paintBoard(ctx, level, game, bestScore, skin) {
+function paintBoard(ctx, level, game, bestScore, skin, options = {}) {
+  const { hideSnake = false } = options;
   const width = W * CELL;
   const height = H * CELL;
   const pulse = 0.5 + Math.sin(game.pulse) * 0.5;
@@ -251,53 +261,55 @@ function paintBoard(ctx, level, game, bestScore, skin) {
     ctx.stroke();
   }
 
-  game.snake.slice().reverse().forEach((segment, reverseIndex) => {
-    const index = game.snake.length - 1 - reverseIndex;
-    const isHead = index === 0;
-    const x = segment.x * CELL;
-    const y = segment.y * CELL;
-    const bodyFill = ctx.createLinearGradient(x, y, x + CELL, y + CELL);
-    bodyFill.addColorStop(0, skin.colors[0]);
-    bodyFill.addColorStop(0.5, skin.colors[1]);
-    bodyFill.addColorStop(1, skin.colors[2]);
-    ctx.shadowColor = isHead ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.22)";
-    ctx.shadowBlur = isHead ? 16 : 8;
-    ctx.fillStyle = bodyFill;
-    roundRect(ctx, x + 2 + (isHead ? -1 : 0), y + 3, CELL - 4 + (isHead ? 2 : 0), CELL - 6, isHead ? 12 : 10);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = skin.stripe;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x + 7, y + CELL * 0.42);
-    ctx.lineTo(x + CELL - 7, y + CELL * 0.42);
-    ctx.moveTo(x + 8, y + CELL * 0.62);
-    ctx.lineTo(x + CELL - 8, y + CELL * 0.62);
-    ctx.stroke();
-  });
+  if (!hideSnake) {
+    game.snake.slice().reverse().forEach((segment, reverseIndex) => {
+      const index = game.snake.length - 1 - reverseIndex;
+      const isHead = index === 0;
+      const x = segment.x * CELL;
+      const y = segment.y * CELL;
+      const bodyFill = ctx.createLinearGradient(x, y, x + CELL, y + CELL);
+      bodyFill.addColorStop(0, skin.colors[0]);
+      bodyFill.addColorStop(0.5, skin.colors[1]);
+      bodyFill.addColorStop(1, skin.colors[2]);
+      ctx.shadowColor = isHead ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.22)";
+      ctx.shadowBlur = isHead ? 16 : 8;
+      ctx.fillStyle = bodyFill;
+      roundRect(ctx, x + 2 + (isHead ? -1 : 0), y + 3, CELL - 4 + (isHead ? 2 : 0), CELL - 6, isHead ? 12 : 10);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = skin.stripe;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x + 7, y + CELL * 0.42);
+      ctx.lineTo(x + CELL - 7, y + CELL * 0.42);
+      ctx.moveTo(x + 8, y + CELL * 0.62);
+      ctx.lineTo(x + CELL - 8, y + CELL * 0.62);
+      ctx.stroke();
+    });
 
-  const head = game.snake[0];
-  if (head) {
-    const hx = head.x * CELL;
-    const hy = head.y * CELL;
-    const dir = game.direction;
-    const eyeX1 = dir.x === 1 ? 17 : dir.x === -1 ? 8 : 11;
-    const eyeX2 = dir.x === 1 ? 17 : dir.x === -1 ? 8 : 17;
-    const eyeY1 = dir.y === 1 ? 16 : dir.y === -1 ? 8 : 9;
-    const eyeY2 = dir.y === 1 ? 16 : dir.y === -1 ? 8 : 17;
-    ctx.fillStyle = "#111";
-    ctx.beginPath();
-    ctx.arc(hx + eyeX1, hy + eyeY1, 2.4, 0, Math.PI * 2);
-    ctx.arc(hx + eyeX2, hy + eyeY2, 2.4, 0, Math.PI * 2);
-    ctx.fill();
-    const tx = hx + CELL / 2 + dir.x * 8;
-    const ty = hy + CELL / 2 + dir.y * 8;
-    ctx.strokeStyle = "#ff6f7d";
-    ctx.lineWidth = 1.8;
-    ctx.beginPath();
-    ctx.moveTo(tx, ty);
-    ctx.lineTo(tx + dir.x * 8 + (dir.y !== 0 ? -3 : 0), ty + dir.y * 8 - 2);
-    ctx.stroke();
+    const head = game.snake[0];
+    if (head) {
+      const hx = head.x * CELL;
+      const hy = head.y * CELL;
+      const dir = game.direction;
+      const eyeX1 = dir.x === 1 ? 17 : dir.x === -1 ? 8 : 11;
+      const eyeX2 = dir.x === 1 ? 17 : dir.x === -1 ? 8 : 17;
+      const eyeY1 = dir.y === 1 ? 16 : dir.y === -1 ? 8 : 9;
+      const eyeY2 = dir.y === 1 ? 16 : dir.y === -1 ? 8 : 17;
+      ctx.fillStyle = "#111";
+      ctx.beginPath();
+      ctx.arc(hx + eyeX1, hy + eyeY1, 2.4, 0, Math.PI * 2);
+      ctx.arc(hx + eyeX2, hy + eyeY2, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+      const tx = hx + CELL / 2 + dir.x * 8;
+      const ty = hy + CELL / 2 + dir.y * 8;
+      ctx.strokeStyle = "#ff6f7d";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx + dir.x * 8 + (dir.y !== 0 ? -3 : 0), ty + dir.y * 8 - 2);
+      ctx.stroke();
+    }
   }
 
   ctx.strokeStyle = "rgba(255,255,255,0.18)";
@@ -313,6 +325,7 @@ function paintBoard(ctx, level, game, bestScore, skin) {
 function LevelCard({ level, progress, selected, onSelect }) {
   const unlocked = canUnlockLevel(level, progress);
   const cleared = progress.clearedLevels.includes(level.id);
+  const requiredSnake = getSnakeName(level.requirements.snakeId);
   return (
     <button
       className={`levelCard ${selected ? "selected" : ""} ${unlocked ? "" : "locked"}`}
@@ -325,10 +338,26 @@ function LevelCard({ level, progress, selected, onSelect }) {
       <p>{level.description}</p>
       <div className="levelMeta">
         <span>{level.theme}</span>
-        <span>{unlocked ? `Goal ${level.goal}` : `Unlock at ${level.unlockApples} apples`}</span>
+        <span>Goal {level.goal}</span>
+        <span>{level.requirements.apples} apples</span>
+        <span>{level.requirements.coins} coins</span>
+        <span>Rank {level.requirements.rank}</span>
+        <span>{requiredSnake}</span>
       </div>
       <div className="levelState">{cleared ? "Cleared" : unlocked ? "Ready" : "Locked"}</div>
     </button>
+  );
+}
+
+function MetricCard({ icon, label, value }) {
+  return (
+    <div className="metricCard">
+      <img className="metricIcon" src={icon} alt="" aria-hidden="true" />
+      <div>
+        <span>{label}</span>
+        <strong>{value}</strong>
+      </div>
+    </div>
   );
 }
 
@@ -339,7 +368,18 @@ function SnakeCard({ snake, progress, selected, onSelect, onBuy }) {
 
   return (
     <div className={`snakeCard ${selected ? "selected" : ""}`}>
-      <div className="snakeSwatch" style={{ "--s0": snake.colors[0], "--s1": snake.colors[1], "--s2": snake.colors[2], "--stripe": snake.stripe }} />
+      <div
+        className={`snakeSwatch pattern-${snake.pattern}`}
+        style={{ "--s0": snake.colors[0], "--s1": snake.colors[1], "--s2": snake.colors[2], "--stripe": snake.stripe }}
+      >
+        <div className="snakePortrait">
+          <span className="portraitCoil portraitCoilA" />
+          <span className="portraitCoil portraitCoilB" />
+          <span className="portraitHead" />
+          <span className="portraitEye portraitEyeA" />
+          <span className="portraitEye portraitEyeB" />
+        </div>
+      </div>
       <div className="snakeInfo">
         <div className="snakeNameRow">
           <h3>{snake.name}</h3>
@@ -372,12 +412,14 @@ function MenuScreen({ progress, onStart }) {
     <section className="screen heroScreen">
       <div className="heroGlow" />
       <div className="heroPanel">
+        <div className="creatorBanner">SAMARTH GAMER'S</div>
+        <img className="brandLogo" src="/snake-realms-logo.svg" alt="Snake Realms logo" />
         <div className="eyebrow">React Snake Adventure</div>
         <h1>Snake Realms</h1>
         <p className="heroCopy">Choose levels, collect apples one by one correctly, earn gold coins, and unlock snakes from all around the world.</p>
         <div className="heroStats">
-          <div><span>Total Apples</span><strong>{progress.totalApples}</strong></div>
-          <div><span>Coins</span><strong>{progress.coins}</strong></div>
+          <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
+          <MetricCard icon="/coin-icon.svg" label="Coins" value={progress.coins} />
           <div><span>Best Rank</span><strong>{progress.bestScore}</strong></div>
         </div>
         <button className="primaryButton" type="button" onClick={onStart}>Start Adventure</button>
@@ -394,15 +436,20 @@ function MenuScreen({ progress, onStart }) {
 
 function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay }) {
   const selectedLevel = LEVELS.find((level) => level.id === selectedLevelId) ?? LEVELS[0];
+  const requiredSnake = getSnakeName(selectedLevel.requirements.snakeId);
   return (
     <section className="screen levelsScreen">
       <div className="screenHeader">
-        <div><div className="eyebrow">Choose A Challenge</div><h2>Level Select</h2></div>
+        <div>
+          <img className="headerLogo" src="/snake-realms-logo.svg" alt="Snake Realms logo" />
+          <div className="eyebrow">Choose A Challenge</div>
+          <h2>Level Select</h2>
+        </div>
         <button className="secondaryButton" type="button" onClick={onBack}>Back</button>
       </div>
       <div className="levelSummary">
-        <div><span>Total Apples</span><strong>{progress.totalApples}</strong></div>
-        <div><span>Coins</span><strong>{progress.coins}</strong></div>
+        <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
+        <MetricCard icon="/coin-icon.svg" label="Coins" value={progress.coins} />
         <div><span>Best Rank</span><strong>{progress.bestScore}</strong></div>
       </div>
       <div className="levelsGrid">
@@ -418,6 +465,10 @@ function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay
             <span>{selectedLevel.theme}</span>
             <span>Goal {selectedLevel.goal}</span>
             <span>Speed {selectedLevel.speedMs} ms</span>
+            <span>{selectedLevel.requirements.apples} apples</span>
+            <span>{selectedLevel.requirements.coins} coins</span>
+            <span>Rank {selectedLevel.requirements.rank}</span>
+            <span>{requiredSnake}</span>
           </div>
         </div>
         <button className="primaryButton" type="button" disabled={!canUnlockLevel(selectedLevel, progress)} onClick={() => onPlay(selectedLevel.id)}>
@@ -429,15 +480,22 @@ function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay
 }
 
 function SnakeCollectionScreen({ level, progress, selectedSkinId, onSelectSkin, onBuySkin, onBack, onStartGame }) {
+  const requiredSnake = getSnakeName(level.requirements.snakeId);
+  const hasRequiredSnake = progress.purchasedSkins.includes(level.requirements.snakeId);
+  const usingRequiredSnake = selectedSkinId === level.requirements.snakeId;
   return (
     <section className="screen levelsScreen">
       <div className="screenHeader">
-        <div><div className="eyebrow">World Snake Collection</div><h2>Choose Your Snake</h2></div>
+        <div>
+          <img className="headerLogo" src="/snake-realms-logo.svg" alt="Snake Realms logo" />
+          <div className="eyebrow">World Snake Collection</div>
+          <h2>Choose Your Snake</h2>
+        </div>
         <button className="secondaryButton" type="button" onClick={onBack}>Back</button>
       </div>
       <div className="levelSummary">
         <div><span>Current Level</span><strong>{level.name}</strong></div>
-        <div><span>Total Apples</span><strong>{progress.totalApples}</strong></div>
+        <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
         <div><span>Coins / Rank</span><strong>{progress.coins} / {progress.bestScore}</strong></div>
       </div>
       <div className="snakeGrid">
@@ -448,14 +506,18 @@ function SnakeCollectionScreen({ level, progress, selectedSkinId, onSelectSkin, 
       <div className="selectedPanel">
         <div className="selectedCopy">
           <h3>Shop Logic</h3>
-          <p>Normal snake is free. After that, each snake rises by 25 apples and 25 coins, while the required rank rises by 50.</p>
+          <p>This level needs {requiredSnake}. A level opens only when apples, coins, rank, and the required snake are all ready.</p>
           <div className="selectedMeta">
             <span>2 score = 1 gold coin</span>
             <span>1 apple = 1 apple count</span>
-            <span>Selected snake is used in game</span>
+            <span>{level.requirements.apples} apples</span>
+            <span>{level.requirements.coins} coins</span>
+            <span>Rank {level.requirements.rank}</span>
           </div>
         </div>
-        <button className="primaryButton" type="button" onClick={onStartGame}>Start With Selected Snake</button>
+        <button className="primaryButton" type="button" disabled={!hasRequiredSnake || !usingRequiredSnake} onClick={onStartGame}>
+          Start With {requiredSnake}
+        </button>
       </div>
     </section>
   );
@@ -466,13 +528,113 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
   const [game, setGame] = useState(() => createGame(level));
   const prevScoreRef = useRef(0);
   const prevStatusRef = useRef("ready");
+  const lastSoundRef = useRef({ score: 0, status: "ready" });
+  const audioRef = useRef({ ctx: null, master: null, unlocked: false });
+
+  function ensureAudio() {
+    if (audioRef.current.ctx) return true;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return false;
+    const ctx = new Ctx();
+    const master = ctx.createGain();
+    master.gain.value = 0.13;
+    master.connect(ctx.destination);
+    audioRef.current = { ctx, master, unlocked: false };
+    return true;
+  }
+
+  async function unlockAudio() {
+    if (!ensureAudio()) return;
+    const audio = audioRef.current;
+    try {
+      if (audio.ctx.state !== "running") await audio.ctx.resume();
+      audio.unlocked = audio.ctx.state === "running";
+    } catch {
+      // Ignore browser autoplay restrictions until the next interaction.
+    }
+  }
+
+  function playTone({ type = "sine", f0 = 440, f1 = 440, duration = 0.12, gain = 0.4 } = {}) {
+    const audio = audioRef.current;
+    if (!audio.unlocked || !audio.ctx || !audio.master) return;
+    const now = audio.ctx.currentTime;
+    const osc = audio.ctx.createOscillator();
+    const g = audio.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(f0, now);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(30, f1), now + duration);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(g);
+    g.connect(audio.master);
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  }
+
+  function playNoise(duration = 0.12, gain = 0.35, filterType = "highpass", filterFreq = 320) {
+    const audio = audioRef.current;
+    if (!audio.unlocked || !audio.ctx || !audio.master) return;
+    const now = audio.ctx.currentTime;
+    const size = Math.floor(audio.ctx.sampleRate * duration);
+    const buffer = audio.ctx.createBuffer(1, size, audio.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i += 1) data[i] = (Math.random() * 2 - 1) * (1 - i / size);
+    const src = audio.ctx.createBufferSource();
+    const filter = audio.ctx.createBiquadFilter();
+    const g = audio.ctx.createGain();
+    src.buffer = buffer;
+    filter.type = filterType;
+    filter.frequency.value = filterFreq;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), now + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(audio.master);
+    src.start(now);
+    src.stop(now + duration + 0.02);
+  }
+
+  function playEatSound() {
+    playTone({ type: "triangle", f0: 420, f1: 880, duration: 0.09, gain: 0.45 });
+    playTone({ type: "sine", f0: 760, f1: 620, duration: 0.06, gain: 0.22 });
+  }
+
+  function playFoulSound() {
+    playNoise(0.12, 0.34, "highpass", 280);
+    playTone({ type: "sawtooth", f0: 180, f1: 72, duration: 0.18, gain: 0.34 });
+  }
+
+  function playEagleSound() {
+    playTone({ type: "square", f0: 1080, f1: 920, duration: 0.08, gain: 0.16 });
+    playTone({ type: "triangle", f0: 920, f1: 680, duration: 0.12, gain: 0.18 });
+    playTone({ type: "square", f0: 1240, f1: 980, duration: 0.09, gain: 0.14 });
+  }
 
   useEffect(() => {
     const next = createGame(level);
     setGame(next);
     prevScoreRef.current = 0;
     prevStatusRef.current = "ready";
+    lastSoundRef.current = { score: 0, status: "ready" };
   }, [level, skin.id]);
+
+  useEffect(() => {
+    if (game.status !== "caught") return undefined;
+    const timer = window.setTimeout(() => {
+      setGame((current) =>
+        current.status === "caught"
+          ? {
+              ...current,
+              status: "game_over",
+              message: "The eagle escaped with your snake. Try again."
+            }
+          : current
+      );
+    }, 1800);
+    return () => window.clearTimeout(timer);
+  }, [game.status]);
 
   useEffect(() => {
     const handleKey = (event) => {
@@ -480,6 +642,7 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
       const direction = key === "arrowup" || key === "w" ? { x: 0, y: -1 } : key === "arrowdown" || key === "s" ? { x: 0, y: 1 } : key === "arrowleft" || key === "a" ? { x: -1, y: 0 } : key === "arrowright" || key === "d" ? { x: 1, y: 0 } : null;
       if (!direction) {
         if (key === "r") {
+          unlockAudio();
           setGame(createGame(level));
           prevScoreRef.current = 0;
           prevStatusRef.current = "ready";
@@ -487,6 +650,7 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
         return;
       }
       event.preventDefault();
+      unlockAudio();
       setGame((current) => {
         if (direction.x === -current.direction.x && direction.y === -current.direction.y) return current;
         return {
@@ -514,7 +678,14 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
         const hitSnake = body.some((segment) => samePoint(segment, nextHead));
         const hitObstacle = current.obstacles.some((segment) => samePoint(segment, nextHead));
         if (!inside(nextHead) || hitSnake || hitObstacle) {
-          return { ...current, direction, queuedDirection: null, status: "game_over", pulse, message: "The serpent crashed. Restart and strike again." };
+          return {
+            ...current,
+            direction,
+            queuedDirection: null,
+            status: "caught",
+            pulse,
+            message: "Foul! An eagle spotted the snake."
+          };
         }
         const snakeState = [nextHead, ...current.snake];
         let score = current.score;
@@ -548,6 +719,17 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
   }, [game.status, level]);
 
   useEffect(() => {
+    if (game.score > lastSoundRef.current.score) {
+      playEatSound();
+    }
+    if (game.status === "caught" && lastSoundRef.current.status !== "caught") {
+      playFoulSound();
+      playEagleSound();
+    }
+    lastSoundRef.current = { score: game.score, status: game.status };
+  }, [game.score, game.status]);
+
+  useEffect(() => {
     const previousScore = prevScoreRef.current;
     const previousStatus = prevStatusRef.current;
     if (game.score > previousScore || (game.status === "won" && previousStatus !== "won")) {
@@ -569,7 +751,7 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
-    if (ctx) paintBoard(ctx, level, game, progress.bestScore, skin);
+    if (ctx) paintBoard(ctx, level, game, progress.bestScore, skin, { hideSnake: game.status === "caught" });
   }, [game, level, progress.bestScore, skin]);
 
   const turn = (direction) => {
@@ -584,10 +766,22 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
     });
   };
 
+  const caughtHead = game.snake[0];
+  const eaglePickupStyle = caughtHead
+    ? {
+        left: `${((caughtHead.x + 0.5) / W) * 100}%`,
+        top: `${((caughtHead.y + 0.5) / H) * 100}%`
+      }
+    : undefined;
+
   return (
     <section className="screen gameScreen">
       <div className="screenHeader">
-        <div><div className="eyebrow">Level {level.id}</div><h2>{level.name}</h2></div>
+        <div>
+          <img className="headerLogo" src="/snake-realms-logo.svg" alt="Snake Realms logo" />
+          <div className="eyebrow">Level {level.id}</div>
+          <h2>{level.name}</h2>
+        </div>
         <button className="secondaryButton" type="button" onClick={onBackToSnakes}>Snake Collection</button>
       </div>
       <div className="gameLayout">
@@ -595,42 +789,56 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
           <canvas ref={canvasRef} width={W * CELL} height={H * CELL} className="gameCanvas" />
           <div className={`gameOverlay ${game.status === "playing" ? "hidden" : ""}`}>
             <div className="overlayCard">
-              <div className="overlayTitle">{game.status === "won" ? "Level Cleared" : game.status === "game_over" ? "Serpent Down" : "Ready To Hunt"}</div>
+              <div className="overlayTitle">{game.status === "won" ? "Level Cleared" : game.status === "game_over" ? "Serpent Down" : game.status === "caught" ? "Eagle Attack" : "Ready To Hunt"}</div>
               <p>{game.message}</p>
               <div className="overlayActions">
-                {game.status !== "won" && (
-                  <button className="primaryButton" type="button" onClick={() => setGame((current) => ({ ...current, status: current.status === "ready" ? "playing" : current.status, message: "" }))}>
+                {game.status !== "won" && game.status !== "caught" && (
+                  <button className="primaryButton" type="button" onClick={() => { unlockAudio(); setGame((current) => ({ ...current, status: current.status === "ready" ? "playing" : current.status, message: "" })); }}>
                     Start Run
                   </button>
                 )}
-                <button
-                  className="secondaryButton"
-                  type="button"
-                  onClick={() => {
-                    setGame(createGame(level));
-                    prevScoreRef.current = 0;
-                    prevStatusRef.current = "ready";
-                  }}
-                >
-                  Restart
-                </button>
+                {game.status !== "caught" && (
+                  <button
+                    className="secondaryButton"
+                    type="button"
+                    onClick={() => {
+                      unlockAudio();
+                      setGame(createGame(level));
+                      prevScoreRef.current = 0;
+                      prevStatusRef.current = "ready";
+                    }}
+                  >
+                    Restart
+                  </button>
+                )}
               </div>
             </div>
           </div>
+          {game.status === "caught" && (
+            <div className="eagleScene" aria-hidden="true">
+              <div className="eagle eaglePickup" style={eaglePickupStyle}>
+                <span className="eagleWing eagleWingLeft" />
+                <span className="eagleBody" />
+                <span className="eagleWing eagleWingRight" />
+                <span className="eagleClaw" />
+                <span className="eagleSnake" />
+              </div>
+            </div>
+          )}
         </div>
         <aside className="hudPanel">
           <div className="hudStat"><span>Score</span><strong>{game.score}</strong></div>
-          <div className="hudStat"><span>Coins This Run</span><strong>{Math.floor(game.score / 2)}</strong></div>
-          <div className="hudStat"><span>Total Apples</span><strong>{progress.totalApples}</strong></div>
-          <div className="hudStat"><span>Coins</span><strong>{progress.coins}</strong></div>
+          <MetricCard icon="/coin-icon.svg" label="Coins This Run" value={Math.floor(game.score / 2)} />
+          <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
+          <MetricCard icon="/coin-icon.svg" label="Coins" value={progress.coins} />
           <div className="hudStat"><span>Snake</span><strong>{skin.name}</strong></div>
           <div className="controlsPanel">
-            <button className="secondaryButton" type="button" onClick={() => turn({ x: 0, y: -1 })}>Up</button>
+            <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 0, y: -1 }); }}>Up</button>
             <div className="controlRow">
-              <button className="secondaryButton" type="button" onClick={() => turn({ x: -1, y: 0 })}>Left</button>
-              <button className="secondaryButton" type="button" onClick={() => turn({ x: 1, y: 0 })}>Right</button>
+              <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: -1, y: 0 }); }}>Left</button>
+              <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 1, y: 0 }); }}>Right</button>
             </div>
-            <button className="secondaryButton" type="button" onClick={() => turn({ x: 0, y: 1 })}>Down</button>
+            <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 0, y: 1 }); }}>Down</button>
           </div>
           <p className="controlsHint">Controls: Arrow keys or WASD. Apple count now moves one apple at a time, and coins follow the rule 2 score = 1 coin.</p>
         </aside>
