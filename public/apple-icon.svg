@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="appleGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(46 38) rotate(51.52) scale(70.9704)">
+      <stop stop-color="#FFF2C0"/>
+      <stop offset="0.45" stop-color="#FF7A73"/>
+      <stop offset="1" stop-color="#C81E3B"/>
+    </radialGradient>
+  </defs>
+  <path d="M64.312 33C74.714 33 83.625 36.612 89.776 43.769C95.561 50.501 99 60.102 99 69.545C99 89.875 83.783 106 64.401 106C45.142 106 29 89.876 29 69.635C29 50.058 44.809 33 64.312 33Z" fill="url(#appleGlow)"/>
+  <path d="M64.647 31.674C68.861 23.987 77.494 18.625 87.378 18.625C85.687 28.053 77.795 35.517 67.993 36.659" stroke="#7BDA5E" stroke-width="7" stroke-linecap="round"/>
+  <path d="M59.848 27.354C57.601 21.327 58.867 14.301 63.503 9C68.529 13.017 71.015 20.13 69.688 26.253" stroke="#4FBF5A" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="52.5" cy="51" rx="14.5" ry="8.5" fill="white" fill-opacity="0.28" transform="rotate(-24 52.5 51)"/>
+</svg>
