@@ -1,16 +1,16 @@
 const SNAKE_THEMES = [
-  { name: "Normal Garden Snake", region: "Starter", colors: ["#efffd8", "#95ff8d", "#2b7b2e"], stripe: "#d5ff94" },
-  { name: "King Cobra", region: "India", colors: ["#ffe0a8", "#9d6d33", "#2f1d0a"], stripe: "#f7cf6a" },
-  { name: "Green Anaconda", region: "Amazon", colors: ["#d7ffb1", "#557d37", "#1b2a12"], stripe: "#bfe469" },
-  { name: "Burmese Python", region: "Southeast Asia", colors: ["#f9e0b6", "#8c6548", "#3f2518"], stripe: "#d9b67f" },
-  { name: "Black Mamba", region: "Africa", colors: ["#d4d8db", "#4d585f", "#13181c"], stripe: "#8c969e" },
-  { name: "Coral Snake", region: "Americas", colors: ["#ffe8a6", "#d62828", "#111111"], stripe: "#ffcd57" },
-  { name: "Boa Constrictor", region: "South America", colors: ["#f0ddc2", "#8c5f3b", "#332014"], stripe: "#cda277" },
-  { name: "Rattlesnake", region: "North America", colors: ["#f1ddaf", "#84724e", "#342617"], stripe: "#d0ba79" },
-  { name: "Green Tree Python", region: "Oceania", colors: ["#d5ffc1", "#4bd86e", "#14682b"], stripe: "#baff8c" },
-  { name: "Sea Krait", region: "Pacific Ocean", colors: ["#fff8c2", "#2846b8", "#101b44"], stripe: "#f8da6e" },
-  { name: "Bushmaster", region: "Rainforest", colors: ["#ffe6b8", "#8b4b2a", "#2d1208"], stripe: "#d99458" },
-  { name: "Gaboon Viper", region: "Central Africa", colors: ["#f0e0b8", "#8e7a57", "#392c1d"], stripe: "#ceb78a" }
+  { name: "Normal Garden Snake", region: "Starter", colors: ["#efffd8", "#95ff8d", "#2b7b2e"], stripe: "#d5ff94", pattern: "smooth" },
+  { name: "King Cobra", region: "India", colors: ["#ffe0a8", "#9d6d33", "#2f1d0a"], stripe: "#f7cf6a", pattern: "hood" },
+  { name: "Green Anaconda", region: "Amazon", colors: ["#d7ffb1", "#557d37", "#1b2a12"], stripe: "#bfe469", pattern: "rosettes" },
+  { name: "Burmese Python", region: "Southeast Asia", colors: ["#f9e0b6", "#8c6548", "#3f2518"], stripe: "#d9b67f", pattern: "patches" },
+  { name: "Black Mamba", region: "Africa", colors: ["#d4d8db", "#4d585f", "#13181c"], stripe: "#8c969e", pattern: "sleek" },
+  { name: "Coral Snake", region: "Americas", colors: ["#ffe8a6", "#d62828", "#111111"], stripe: "#ffcd57", pattern: "rings" },
+  { name: "Boa Constrictor", region: "South America", colors: ["#f0ddc2", "#8c5f3b", "#332014"], stripe: "#cda277", pattern: "saddle" },
+  { name: "Rattlesnake", region: "North America", colors: ["#f1ddaf", "#84724e", "#342617"], stripe: "#d0ba79", pattern: "diamond" },
+  { name: "Green Tree Python", region: "Oceania", colors: ["#d5ffc1", "#4bd86e", "#14682b"], stripe: "#baff8c", pattern: "neon" },
+  { name: "Sea Krait", region: "Pacific Ocean", colors: ["#fff8c2", "#2846b8", "#101b44"], stripe: "#f8da6e", pattern: "bands" },
+  { name: "Bushmaster", region: "Rainforest", colors: ["#ffe6b8", "#8b4b2a", "#2d1208"], stripe: "#d99458", pattern: "chevron" },
+  { name: "Gaboon Viper", region: "Central Africa", colors: ["#f0e0b8", "#8e7a57", "#392c1d"], stripe: "#ceb78a", pattern: "mosaic" }
 ];
 
 export const SNAKES = SNAKE_THEMES.map((theme, index) => ({
@@ -23,6 +23,7 @@ export const SNAKES = SNAKE_THEMES.map((theme, index) => ({
       : `Unlock this world snake with rank ${index * 50}, ${index * 25} apples, and ${index * 25} coins.`,
   colors: theme.colors,
   stripe: theme.stripe,
+  pattern: theme.pattern,
   requirements:
     index === 0
       ? { rank: 0, apples: 0, coins: 0 }
