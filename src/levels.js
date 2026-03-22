@@ -2,8 +2,13 @@ export const LEVELS = [
   {
     id: 1,
     name: "Emerald Meadow",
-    unlockApples: 0,
-    goal: 12,
+    requirements: {
+      apples: 0,
+      coins: 0,
+      rank: 0,
+      snakeId: "normal-garden-snake"
+    },
+    goal: 50,
     speedMs: 150,
     theme: "Classic open field",
     description: "A calm arena to learn the rhythm. No obstacles, just pure snake.",
@@ -18,8 +23,13 @@ export const LEVELS = [
   {
     id: 2,
     name: "Amber Ruins",
-    unlockApples: 25,
-    goal: 16,
+    requirements: {
+      apples: 25,
+      coins: 25,
+      rank: 50,
+      snakeId: "king-cobra"
+    },
+    goal: 75,
     speedMs: 140,
     theme: "Random stone traps",
     description: "Collect 25 apples overall to unlock. Broken pillars appear in different places every run.",
@@ -34,8 +44,13 @@ export const LEVELS = [
   {
     id: 3,
     name: "Cobalt Canyon",
-    unlockApples: 50,
-    goal: 18,
+    requirements: {
+      apples: 50,
+      coins: 50,
+      rank: 100,
+      snakeId: "green-anaconda"
+    },
+    goal: 100,
     speedMs: 132,
     theme: "Split-lane pressure",
     description: "Thin rock lanes cut the map into risky channels.",
@@ -50,8 +65,13 @@ export const LEVELS = [
   {
     id: 4,
     name: "Ruby Nest",
-    unlockApples: 80,
-    goal: 20,
+    requirements: {
+      apples: 75,
+      coins: 75,
+      rank: 150,
+      snakeId: "burmese-python"
+    },
+    goal: 125,
     speedMs: 124,
     theme: "Tight corner traps",
     description: "The borders squeeze inward with dangerous rocky nests.",
@@ -66,8 +86,13 @@ export const LEVELS = [
   {
     id: 5,
     name: "Ivory Spiral",
-    unlockApples: 115,
-    goal: 22,
+    requirements: {
+      apples: 100,
+      coins: 100,
+      rank: 200,
+      snakeId: "black-mamba"
+    },
+    goal: 150,
     speedMs: 118,
     theme: "Spiral labyrinth",
     description: "A coiled maze that rewards patience and smooth turning.",
@@ -82,8 +107,13 @@ export const LEVELS = [
   {
     id: 6,
     name: "Violet Marsh",
-    unlockApples: 150,
-    goal: 24,
+    requirements: {
+      apples: 125,
+      coins: 125,
+      rank: 250,
+      snakeId: "coral-snake"
+    },
+    goal: 175,
     speedMs: 112,
     theme: "Broken islands",
     description: "Staggered bog islands make every recovery turn harder.",
@@ -98,8 +128,13 @@ export const LEVELS = [
   {
     id: 7,
     name: "Solar Forge",
-    unlockApples: 190,
-    goal: 26,
+    requirements: {
+      apples: 150,
+      coins: 150,
+      rank: 300,
+      snakeId: "boa-constrictor"
+    },
+    goal: 200,
     speedMs: 106,
     theme: "Crossfire core",
     description: "A blazing central forge splits the arena into hot escape routes.",
@@ -114,8 +149,13 @@ export const LEVELS = [
   {
     id: 8,
     name: "Glacier Pulse",
-    unlockApples: 235,
-    goal: 28,
+    requirements: {
+      apples: 175,
+      coins: 175,
+      rank: 350,
+      snakeId: "rattlesnake"
+    },
+    goal: 225,
     speedMs: 100,
     theme: "Frozen checkpoints",
     description: "Cold crystal walls force fast pivots and clean planning.",
@@ -130,8 +170,13 @@ export const LEVELS = [
   {
     id: 9,
     name: "Obsidian Crown",
-    unlockApples: 285,
-    goal: 30,
+    requirements: {
+      apples: 200,
+      coins: 200,
+      rank: 400,
+      snakeId: "green-tree-python"
+    },
+    goal: 250,
     speedMs: 94,
     theme: "Royal gauntlet",
     description: "The crown chambers create sharp reversals and narrow survival lines.",
@@ -146,8 +191,13 @@ export const LEVELS = [
   {
     id: 10,
     name: "Dragon Eclipse",
-    unlockApples: 340,
-    goal: 34,
+    requirements: {
+      apples: 225,
+      coins: 225,
+      rank: 450,
+      snakeId: "sea-krait"
+    },
+    goal: 275,
     speedMs: 88,
     theme: "Ultimate maze",
     description: "A brutal final arena with layered chambers worthy of a serpent king.",
