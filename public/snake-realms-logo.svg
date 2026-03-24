@@ -1,0 +1,48 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="72" x2="560" y2="568" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18332A"/>
+      <stop offset="1" stop-color="#07100D"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(228 176) rotate(48.5) scale(294.67 258.666)">
+      <stop stop-color="#B7FF77" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#B7FF77" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="snakeBody" x1="197" y1="190" x2="461" y2="454" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4FFD2"/>
+      <stop offset="0.48" stop-color="#8FFF80"/>
+      <stop offset="1" stop-color="#215E25"/>
+    </linearGradient>
+    <linearGradient id="snakeStripe" x1="256" y1="198" x2="425" y2="412" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE98C"/>
+      <stop offset="1" stop-color="#FF9D47"/>
+    </linearGradient>
+    <filter id="shadow" x="70" y="62" width="500" height="510" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="24"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0.173 0 0 0 0 0.109 0 0 0 0.44 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="640" height="640" rx="168" fill="url(#bg)"/>
+  <circle cx="320" cy="320" r="240" fill="url(#halo)"/>
+  <g filter="url(#shadow)">
+    <path d="M420.125 185C476.96 185 523 231.04 523 287.875C523 344.71 476.96 390.75 420.125 390.75H350.659C324.602 390.75 303.477 411.875 303.477 437.932C303.477 463.989 282.352 485.114 256.295 485.114C230.238 485.114 209.113 463.989 209.113 437.932C209.113 371.852 262.659 318.307 328.739 318.307H414.466C431.59 318.307 445.472 304.425 445.472 287.301C445.472 270.177 431.59 256.295 414.466 256.295H265.455C196.967 256.295 141.438 311.824 141.438 380.313C141.438 448.801 196.967 504.33 265.455 504.33H293.864" stroke="url(#snakeBody)" stroke-width="74" stroke-linecap="round"/>
+    <path d="M419.94 213C462.165 213 496.386 247.22 496.386 289.445C496.386 331.67 462.165 365.891 419.94 365.891H348.295C307.294 365.891 274.057 399.128 274.057 440.129C274.057 450.674 271.53 460.64 267.052 469.438" stroke="url(#snakeStripe)" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-dasharray="18 22"/>
+    <path d="M254.914 170C292.259 170 322.536 200.277 322.536 237.622C322.536 274.968 292.259 305.244 254.914 305.244C217.569 305.244 187.292 274.968 187.292 237.622C187.292 200.277 217.569 170 254.914 170Z" fill="url(#snakeBody)"/>
+    <path d="M197.426 232.24C201.167 208.149 222.001 189.688 247.231 189.688H267.99C292.531 189.688 312.944 207.167 316.09 230.979C306.664 230.207 295.626 229.821 283.146 229.821C250.229 229.821 221.656 232.025 197.426 236.433V232.24Z" fill="#F5FFD9" fill-opacity="0.62"/>
+    <circle cx="276.861" cy="220.442" r="8.873" fill="#111A13"/>
+    <circle cx="249.395" cy="217.245" r="8.873" fill="#111A13"/>
+    <circle cx="279.364" cy="217.245" r="2.504" fill="white" fill-opacity="0.75"/>
+    <circle cx="251.898" cy="214.742" r="2.504" fill="white" fill-opacity="0.75"/>
+    <path d="M322.536 238.124C361.294 238.124 396.62 249.616 421.325 267.985" stroke="#FF8E76" stroke-width="8" stroke-linecap="round"/>
+    <path d="M419.719 268.368L446.593 267.527" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
+    <path d="M446.338 267.528L463.156 257.016" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
+    <path d="M446.338 267.528L463.156 278.039" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <path d="M148 542C148 529.85 157.85 520 170 520H470C482.15 520 492 529.85 492 542C492 554.15 482.15 564 470 564H170C157.85 564 148 554.15 148 542Z" fill="white" fill-opacity="0.08"/>
+</svg>
