@@ -361,6 +361,143 @@ function MetricCard({ icon, label, value }) {
   );
 }
 
+function SnakePortraitSVG({ snake }) {
+  const [c0, c1, c2] = snake.colors;
+  const stripe = snake.stripe;
+
+  const renderSpecies = () => {
+    switch (snake.portrait) {
+      case "cobra":
+        return (
+          <>
+            <ellipse cx="112" cy="52" rx="42" ry="30" fill={c1} />
+            <ellipse cx="112" cy="52" rx="28" ry="20" fill={c0} opacity="0.55" />
+            <path d="M28 102C52 88 69 89 82 77C93 67 98 59 112 58C129 57 142 67 150 82C158 96 171 103 195 101" fill="none" stroke={c2} strokeWidth="28" strokeLinecap="round" />
+            <path d="M32 102C54 89 74 92 91 82" fill="none" stroke={stripe} strokeWidth="7" strokeLinecap="round" strokeDasharray="8 10" />
+          </>
+        );
+      case "anaconda":
+        return (
+          <>
+            <path d="M22 96C46 78 70 111 96 95C118 82 120 56 144 54C165 53 177 69 186 82" fill="none" stroke={c2} strokeWidth="30" strokeLinecap="round" />
+            <path d="M26 94C48 76 68 108 95 93C118 80 123 57 142 56C162 55 173 68 183 80" fill="none" stroke={c1} strokeWidth="21" strokeLinecap="round" />
+            <circle cx="60" cy="90" r="9" fill={c0} opacity="0.45" />
+            <circle cx="92" cy="92" r="10" fill={c0} opacity="0.4" />
+            <circle cx="128" cy="68" r="8" fill={c0} opacity="0.36" />
+          </>
+        );
+      case "python":
+        return (
+          <>
+            <path d="M24 104C43 78 70 84 86 96C101 108 118 102 132 89C149 74 164 61 188 68" fill="none" stroke={c2} strokeWidth="28" strokeLinecap="round" />
+            <path d="M24 104C43 78 70 84 86 96C101 108 118 102 132 89C149 74 164 61 188 68" fill="none" stroke={c1} strokeWidth="18" strokeLinecap="round" />
+            <ellipse cx="62" cy="88" rx="11" ry="7" fill={stripe} opacity="0.45" />
+            <ellipse cx="104" cy="101" rx="12" ry="8" fill={stripe} opacity="0.38" />
+            <ellipse cx="151" cy="78" rx="11" ry="7" fill={stripe} opacity="0.4" />
+          </>
+        );
+      case "mamba":
+        return (
+          <>
+            <path d="M22 102C62 95 86 66 112 59C142 51 167 61 194 79" fill="none" stroke={c2} strokeWidth="20" strokeLinecap="round" />
+            <path d="M22 102C62 95 86 66 112 59C142 51 167 61 194 79" fill="none" stroke={c1} strokeWidth="11" strokeLinecap="round" />
+            <path d="M166 62L190 67L176 79Z" fill="#121212" />
+          </>
+        );
+      case "coral":
+        return (
+          <>
+            <path d="M22 100C48 88 68 96 90 84C112 71 126 52 154 54C173 56 184 63 194 74" fill="none" stroke={c2} strokeWidth="20" strokeLinecap="round" />
+            <path d="M22 100C48 88 68 96 90 84C112 71 126 52 154 54C173 56 184 63 194 74" fill="none" stroke={c1} strokeWidth="12" strokeLinecap="round" strokeDasharray="10 8 5 8" />
+            <path d="M22 100C48 88 68 96 90 84C112 71 126 52 154 54C173 56 184 63 194 74" fill="none" stroke={stripe} strokeWidth="6" strokeLinecap="round" strokeDasharray="5 18" />
+          </>
+        );
+      case "boa":
+        return (
+          <>
+            <path d="M22 104C41 89 64 77 83 87C103 98 122 103 145 87C163 74 175 69 194 73" fill="none" stroke={c2} strokeWidth="27" strokeLinecap="round" />
+            <path d="M22 104C41 89 64 77 83 87C103 98 122 103 145 87C163 74 175 69 194 73" fill="none" stroke={c1} strokeWidth="18" strokeLinecap="round" />
+            <path d="M46 93C57 81 72 81 81 89" stroke={stripe} strokeWidth="6" strokeLinecap="round" />
+            <path d="M110 99C121 88 135 86 145 91" stroke={stripe} strokeWidth="6" strokeLinecap="round" />
+          </>
+        );
+      case "rattlesnake":
+        return (
+          <>
+            <path d="M28 102C55 92 72 86 95 94C118 102 145 96 171 75C178 70 185 69 194 72" fill="none" stroke={c2} strokeWidth="24" strokeLinecap="round" />
+            <path d="M28 102C55 92 72 86 95 94C118 102 145 96 171 75C178 70 185 69 194 72" fill="none" stroke={c1} strokeWidth="14" strokeLinecap="round" />
+            <path d="M44 97L56 91L68 97L56 103Z" fill={stripe} opacity="0.5" />
+            <path d="M101 94L114 88L126 94L114 100Z" fill={stripe} opacity="0.45" />
+            <rect x="16" y="97" width="8" height="8" rx="2" fill="#d7b168" />
+            <rect x="10" y="98" width="6" height="6" rx="2" fill="#b98934" />
+          </>
+        );
+      case "treepython":
+        return (
+          <>
+            <circle cx="72" cy="78" r="28" fill={c1} />
+            <circle cx="72" cy="78" r="18" fill="none" stroke={c2} strokeWidth="10" />
+            <path d="M70 78C89 66 110 53 138 52C162 52 181 61 194 73" fill="none" stroke={c2} strokeWidth="22" strokeLinecap="round" />
+            <path d="M70 78C89 66 110 53 138 52C162 52 181 61 194 73" fill="none" stroke={c1} strokeWidth="12" strokeLinecap="round" />
+          </>
+        );
+      case "seakrait":
+        return (
+          <>
+            <path d="M24 100C46 88 65 89 88 75C111 61 139 52 168 58C179 61 188 66 194 72" fill="none" stroke={c2} strokeWidth="18" strokeLinecap="round" />
+            <path d="M24 100C46 88 65 89 88 75C111 61 139 52 168 58C179 61 188 66 194 72" fill="none" stroke={c1} strokeWidth="10" strokeLinecap="round" strokeDasharray="10 10" />
+            <path d="M24 100C46 88 65 89 88 75C111 61 139 52 168 58C179 61 188 66 194 72" fill="none" stroke={stripe} strokeWidth="4" strokeLinecap="round" strokeDasharray="3 17" />
+          </>
+        );
+      case "bushmaster":
+        return (
+          <>
+            <path d="M24 103C44 90 68 84 92 91C119 99 147 95 171 79C180 73 188 72 194 74" fill="none" stroke={c2} strokeWidth="26" strokeLinecap="round" />
+            <path d="M24 103C44 90 68 84 92 91C119 99 147 95 171 79C180 73 188 72 194 74" fill="none" stroke={c1} strokeWidth="16" strokeLinecap="round" />
+            <path d="M44 98L53 90L61 98" stroke={stripe} strokeWidth="5" strokeLinecap="round" />
+            <path d="M91 94L100 86L108 94" stroke={stripe} strokeWidth="5" strokeLinecap="round" />
+            <path d="M138 92L147 84L155 92" stroke={stripe} strokeWidth="5" strokeLinecap="round" />
+          </>
+        );
+      case "gaboon":
+        return (
+          <>
+            <path d="M24 104C49 88 72 80 96 88C120 96 143 94 170 76C179 70 187 69 194 72" fill="none" stroke={c2} strokeWidth="28" strokeLinecap="round" />
+            <path d="M24 104C49 88 72 80 96 88C120 96 143 94 170 76C179 70 187 69 194 72" fill="none" stroke={c1} strokeWidth="18" strokeLinecap="round" />
+            <path d="M52 94L64 86L76 94L64 102Z" fill={stripe} opacity="0.46" />
+            <path d="M107 90L120 82L133 90L120 98Z" fill={stripe} opacity="0.42" />
+          </>
+        );
+      default:
+        return (
+          <>
+            <path d="M24 102C44 90 64 84 88 90C115 97 146 93 172 74C180 68 188 69 194 72" fill="none" stroke={c2} strokeWidth="22" strokeLinecap="round" />
+            <path d="M24 102C44 90 64 84 88 90C115 97 146 93 172 74C180 68 188 69 194 72" fill="none" stroke={c1} strokeWidth="13" strokeLinecap="round" />
+          </>
+        );
+    }
+  };
+
+  return (
+    <svg className="snakeArtSvg" viewBox="0 0 220 120" aria-hidden="true">
+      <defs>
+        <linearGradient id={`body-${snake.id}`} x1="28" y1="20" x2="192" y2="108" gradientUnits="userSpaceOnUse">
+          <stop stopColor={c0} />
+          <stop offset="0.5" stopColor={c1} />
+          <stop offset="1" stopColor={c2} />
+        </linearGradient>
+      </defs>
+      <g opacity="0.98">
+        {renderSpecies()}
+        <ellipse cx="182" cy="72" rx="11" ry="8" fill="#111" />
+        <ellipse cx="171" cy="68" rx="7" ry="6" fill="#111" />
+        <circle cx="184" cy="70" r="1.8" fill="white" opacity="0.7" />
+        <circle cx="173" cy="66.5" r="1.4" fill="white" opacity="0.7" />
+      </g>
+    </svg>
+  );
+}
+
 function SnakeCard({ snake, progress, selected, onSelect, onBuy }) {
   const bought = progress.purchasedSkins.includes(snake.id);
   const { rank, coins, apples } = snake.requirements;
@@ -369,16 +506,10 @@ function SnakeCard({ snake, progress, selected, onSelect, onBuy }) {
   return (
     <div className={`snakeCard ${selected ? "selected" : ""}`}>
       <div
-        className={`snakeSwatch pattern-${snake.pattern}`}
+        className={`snakeSwatch pattern-${snake.pattern} species-${snake.portrait}`}
         style={{ "--s0": snake.colors[0], "--s1": snake.colors[1], "--s2": snake.colors[2], "--stripe": snake.stripe }}
       >
-        <div className="snakePortrait">
-          <span className="portraitCoil portraitCoilA" />
-          <span className="portraitCoil portraitCoilB" />
-          <span className="portraitHead" />
-          <span className="portraitEye portraitEyeA" />
-          <span className="portraitEye portraitEyeB" />
-        </div>
+        <SnakePortraitSVG snake={snake} />
       </div>
       <div className="snakeInfo">
         <div className="snakeNameRow">
