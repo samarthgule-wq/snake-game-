@@ -1,48 +1,69 @@
 <svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="80" y1="72" x2="560" y2="568" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#18332A"/>
-      <stop offset="1" stop-color="#07100D"/>
+    <linearGradient id="bg" x1="58" y1="44" x2="578" y2="602" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14372E"/>
+      <stop offset="0.55" stop-color="#07120F"/>
+      <stop offset="1" stop-color="#030607"/>
     </linearGradient>
-    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(228 176) rotate(48.5) scale(294.67 258.666)">
-      <stop stop-color="#B7FF77" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#B7FF77" stop-opacity="0"/>
+    <radialGradient id="moon" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(231 168) rotate(54.31) scale(296.874 266.736)">
+      <stop stop-color="#D7FF89"/>
+      <stop offset="0.45" stop-color="#92FF96" stop-opacity="0.74"/>
+      <stop offset="1" stop-color="#92FF96" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="snakeBody" x1="197" y1="190" x2="461" y2="454" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F4FFD2"/>
-      <stop offset="0.48" stop-color="#8FFF80"/>
-      <stop offset="1" stop-color="#215E25"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(334 320) rotate(90) scale(228 242)">
+      <stop stop-color="#F5C96D" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#F5C96D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="123" y1="96" x2="525" y2="542" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0FFD8" stop-opacity="0.95"/>
+      <stop offset="0.52" stop-color="#B3FF70" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#2B7641" stop-opacity="0.2"/>
     </linearGradient>
-    <linearGradient id="snakeStripe" x1="256" y1="198" x2="425" y2="412" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFE98C"/>
-      <stop offset="1" stop-color="#FF9D47"/>
+    <linearGradient id="body" x1="179" y1="159" x2="447" y2="486" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6FFE3"/>
+      <stop offset="0.27" stop-color="#D9FF8C"/>
+      <stop offset="0.62" stop-color="#5FCA60"/>
+      <stop offset="1" stop-color="#1E4926"/>
     </linearGradient>
-    <filter id="shadow" x="70" y="62" width="500" height="510" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <linearGradient id="shadowBody" x1="240" y1="235" x2="463" y2="466" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102717"/>
+      <stop offset="1" stop-color="#08100A"/>
+    </linearGradient>
+    <linearGradient id="belly" x1="252" y1="237" x2="410" y2="438" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFEAA4"/>
+      <stop offset="1" stop-color="#FF994D"/>
+    </linearGradient>
+    <filter id="softShadow" x="56" y="69" width="528" height="518" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feFlood flood-opacity="0" result="BackgroundImageFix"/>
       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-      <feOffset dy="18"/>
-      <feGaussianBlur stdDeviation="24"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="28"/>
       <feComposite in2="hardAlpha" operator="out"/>
-      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0.173 0 0 0 0 0.109 0 0 0 0.44 0"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0156863 0 0 0 0 0.105882 0 0 0 0 0.0588235 0 0 0 0.56 0"/>
       <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
       <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
     </filter>
   </defs>
   <rect width="640" height="640" rx="168" fill="url(#bg)"/>
-  <circle cx="320" cy="320" r="240" fill="url(#halo)"/>
-  <g filter="url(#shadow)">
-    <path d="M420.125 185C476.96 185 523 231.04 523 287.875C523 344.71 476.96 390.75 420.125 390.75H350.659C324.602 390.75 303.477 411.875 303.477 437.932C303.477 463.989 282.352 485.114 256.295 485.114C230.238 485.114 209.113 463.989 209.113 437.932C209.113 371.852 262.659 318.307 328.739 318.307H414.466C431.59 318.307 445.472 304.425 445.472 287.301C445.472 270.177 431.59 256.295 414.466 256.295H265.455C196.967 256.295 141.438 311.824 141.438 380.313C141.438 448.801 196.967 504.33 265.455 504.33H293.864" stroke="url(#snakeBody)" stroke-width="74" stroke-linecap="round"/>
-    <path d="M419.94 213C462.165 213 496.386 247.22 496.386 289.445C496.386 331.67 462.165 365.891 419.94 365.891H348.295C307.294 365.891 274.057 399.128 274.057 440.129C274.057 450.674 271.53 460.64 267.052 469.438" stroke="url(#snakeStripe)" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" stroke-dasharray="18 22"/>
-    <path d="M254.914 170C292.259 170 322.536 200.277 322.536 237.622C322.536 274.968 292.259 305.244 254.914 305.244C217.569 305.244 187.292 274.968 187.292 237.622C187.292 200.277 217.569 170 254.914 170Z" fill="url(#snakeBody)"/>
-    <path d="M197.426 232.24C201.167 208.149 222.001 189.688 247.231 189.688H267.99C292.531 189.688 312.944 207.167 316.09 230.979C306.664 230.207 295.626 229.821 283.146 229.821C250.229 229.821 221.656 232.025 197.426 236.433V232.24Z" fill="#F5FFD9" fill-opacity="0.62"/>
-    <circle cx="276.861" cy="220.442" r="8.873" fill="#111A13"/>
-    <circle cx="249.395" cy="217.245" r="8.873" fill="#111A13"/>
-    <circle cx="279.364" cy="217.245" r="2.504" fill="white" fill-opacity="0.75"/>
-    <circle cx="251.898" cy="214.742" r="2.504" fill="white" fill-opacity="0.75"/>
-    <path d="M322.536 238.124C361.294 238.124 396.62 249.616 421.325 267.985" stroke="#FF8E76" stroke-width="8" stroke-linecap="round"/>
-    <path d="M419.719 268.368L446.593 267.527" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
-    <path d="M446.338 267.528L463.156 257.016" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
-    <path d="M446.338 267.528L463.156 278.039" stroke="#FF6479" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="320" cy="320" r="244" fill="url(#moon)"/>
+  <circle cx="320" cy="320" r="220" fill="url(#glow)"/>
+  <circle cx="320" cy="320" r="238" stroke="url(#ring)" stroke-width="10"/>
+  <g filter="url(#softShadow)">
+    <path d="M412.832 159C468.703 159 514 204.297 514 260.168C514 316.039 468.703 361.336 412.832 361.336H356.699C330.301 361.336 308.902 382.734 308.902 409.133C308.902 448.823 276.727 481 237.035 481C197.344 481 165.168 448.823 165.168 409.133C165.168 335.142 225.154 275.156 299.145 275.156H401.707C419.694 275.156 434.274 260.576 434.274 242.59C434.274 224.603 419.694 210.023 401.707 210.023H270.285C198.456 210.023 140.234 268.246 140.234 340.074C140.234 411.902 198.456 470.125 270.285 470.125H304.703" stroke="url(#shadowBody)" stroke-width="88" stroke-linecap="round"/>
+    <path d="M414.73 149C470.601 149 515.898 194.297 515.898 250.168C515.898 306.039 470.601 351.336 414.73 351.336H358.598C332.199 351.336 310.801 372.734 310.801 399.133C310.801 438.823 278.625 471 238.934 471C199.242 471 167.066 438.823 167.066 399.133C167.066 325.142 227.053 265.156 301.043 265.156H403.605C421.592 265.156 436.172 250.576 436.172 232.59C436.172 214.603 421.592 200.023 403.605 200.023H272.184C200.354 200.023 142.133 258.246 142.133 330.074C142.133 401.902 200.354 460.125 272.184 460.125H306.602" stroke="url(#body)" stroke-width="82" stroke-linecap="round"/>
+    <path d="M414.328 184C456.149 184 490.057 217.908 490.057 259.729C490.057 301.55 456.149 335.459 414.328 335.459H352.678C320.715 335.459 294.797 361.377 294.797 393.34C294.797 407.111 290.658 421.065 283.918 432.918" stroke="url(#belly)" stroke-width="18" stroke-linecap="round" stroke-dasharray="18 18"/>
+    <path d="M239.641 151C280.161 151 313.008 183.847 313.008 224.367C313.008 264.886 280.161 297.734 239.641 297.734C199.121 297.734 166.273 264.886 166.273 224.367C166.273 183.847 199.121 151 239.641 151Z" fill="url(#body)"/>
+    <path d="M176.863 221.527C184.164 193.469 209.52 173.852 239.598 173.852H263.859C289.516 173.852 311.696 188.131 320.098 209.145C296.363 205.777 269.145 203.734 239.641 203.734C217.057 203.734 196.136 204.935 176.863 207.34V221.527Z" fill="#F8FFE9" fill-opacity="0.75"/>
+    <path d="M311 228C347.773 229.176 385.773 241.84 419.637 266.852" stroke="#FFB585" stroke-width="9" stroke-linecap="round"/>
+    <path d="M421.461 266.109L452.758 266.109" stroke="#FF5F72" stroke-width="8" stroke-linecap="round"/>
+    <path d="M451.359 266.215L468.91 252.453" stroke="#FF5F72" stroke-width="7" stroke-linecap="round"/>
+    <path d="M451.359 266.215L468.91 279.977" stroke="#FF5F72" stroke-width="7" stroke-linecap="round"/>
+    <path d="M185 259C204.667 247 221.667 244.667 236 252" stroke="#355B2B" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
+    <path d="M225 281C241 270.333 257.333 268.667 274 276" stroke="#355B2B" stroke-width="7" stroke-linecap="round" opacity="0.28"/>
+    <circle cx="262.5" cy="213.5" r="10.5" fill="#101512"/>
+    <circle cx="227.5" cy="210.5" r="10.5" fill="#101512"/>
+    <circle cx="265.5" cy="210.5" r="3" fill="#FFF8E8" fill-opacity="0.8"/>
+    <circle cx="230.5" cy="207.5" r="3" fill="#FFF8E8" fill-opacity="0.8"/>
   </g>
-  <path d="M148 542C148 529.85 157.85 520 170 520H470C482.15 520 492 529.85 492 542C492 554.15 482.15 564 470 564H170C157.85 564 148 554.15 148 542Z" fill="white" fill-opacity="0.08"/>
+  <path d="M148 533C148 520.85 157.85 511 170 511H470C482.15 511 492 520.85 492 533C492 545.15 482.15 555 470 555H170C157.85 555 148 545.15 148 533Z" fill="white" fill-opacity="0.08"/>
 </svg>
