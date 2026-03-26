@@ -26,6 +26,7 @@ body {
     radial-gradient(circle at top left, rgba(68, 149, 101, 0.25), transparent 30%),
     radial-gradient(circle at 80% 20%, rgba(255, 166, 82, 0.2), transparent 25%),
     linear-gradient(180deg, #0b1519 0%, #05090d 100%);
+  overflow-x: hidden;
 }
 
 button {
@@ -40,6 +41,25 @@ button {
 .screen {
   width: min(1320px, 100%);
   margin: 0 auto;
+}
+
+.heroScreen,
+.levelsScreen {
+  position: relative;
+}
+
+.heroScreen::before,
+.levelsScreen::before {
+  content: "";
+  position: absolute;
+  inset: -30px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(211, 255, 129, 0.12), transparent 18%),
+    radial-gradient(circle at 82% 18%, rgba(138, 255, 172, 0.1), transparent 16%),
+    radial-gradient(circle at 25% 78%, rgba(255, 201, 127, 0.1), transparent 20%),
+    radial-gradient(circle at 76% 82%, rgba(136, 216, 255, 0.08), transparent 18%);
+  filter: blur(12px);
+  pointer-events: none;
 }
 
 .heroScreen {
@@ -100,19 +120,25 @@ button {
 }
 
 .brandLogo {
-  width: 132px;
-  height: 132px;
+  width: 154px;
+  height: 154px;
   display: block;
   margin-bottom: 18px;
-  filter: drop-shadow(0 18px 35px rgba(144, 255, 130, 0.25));
+  filter:
+    drop-shadow(0 20px 40px rgba(144, 255, 130, 0.26))
+    drop-shadow(0 6px 18px rgba(255, 206, 111, 0.18));
+  animation: logo-hover 5.8s ease-in-out infinite;
 }
 
 .headerLogo {
-  width: 68px;
-  height: 68px;
+  width: 78px;
+  height: 78px;
   display: block;
   margin-bottom: 12px;
-  filter: drop-shadow(0 12px 24px rgba(144, 255, 130, 0.2));
+  filter:
+    drop-shadow(0 14px 28px rgba(144, 255, 130, 0.22))
+    drop-shadow(0 4px 10px rgba(255, 206, 111, 0.16));
+  animation: logo-hover 6.4s ease-in-out infinite;
 }
 
 .eyebrow {
@@ -551,6 +577,52 @@ h2 {
   margin-top: 18px;
 }
 
+.heroScreen .heroPanel,
+.levelsScreen .levelSummary,
+.levelsScreen .selectedPanel,
+.levelsScreen .levelCard,
+.levelsScreen .snakeCard {
+  position: relative;
+  animation: air-float 7.5s ease-in-out infinite;
+}
+
+.heroScreen .heroPanel::after,
+.levelsScreen .levelSummary::after,
+.levelsScreen .selectedPanel::after,
+.levelsScreen .levelCard::after,
+.levelsScreen .snakeCard::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -22px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.24), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.65;
+  z-index: -1;
+  animation: air-shadow 7.5s ease-in-out infinite;
+}
+
+.levelsScreen .levelCard:nth-child(odd),
+.levelsScreen .snakeCard:nth-child(odd) {
+  animation-delay: -1.6s;
+}
+
+.levelsScreen .levelCard:nth-child(3n),
+.levelsScreen .snakeCard:nth-child(3n) {
+  animation-delay: -3.2s;
+}
+
+.levelsScreen .selectedPanel {
+  animation-duration: 8.4s;
+}
+
+.levelsScreen .levelSummary {
+  animation-duration: 8s;
+}
+
 .gameLayout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -686,6 +758,44 @@ h2 {
   }
 }
 
+@keyframes air-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(0, -8px, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+  75% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@keyframes air-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.62;
+  }
+  50% {
+    transform: scaleX(0.86);
+    opacity: 0.36;
+  }
+}
+
+@keyframes logo-hover {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+}
+
 @keyframes eagle-grab {
   0% {
     transform: translate(-50%, -50%) scale(0.9) rotate(-8deg);
@@ -813,6 +923,25 @@ h2 {
   .snakePreview {
     width: 290px;
     height: 290px;
+  }
+
+  .heroScreen .heroPanel,
+  .levelsScreen .levelSummary,
+  .levelsScreen .selectedPanel,
+  .levelsScreen .levelCard,
+  .levelsScreen .snakeCard,
+  .brandLogo,
+  .headerLogo {
+    animation-duration: 0s;
+    animation-iteration-count: 1;
+  }
+
+  .heroScreen .heroPanel::after,
+  .levelsScreen .levelSummary::after,
+  .levelsScreen .selectedPanel::after,
+  .levelsScreen .levelCard::after,
+  .levelsScreen .snakeCard::after {
+    opacity: 0.44;
   }
 
   .segment:nth-child(1) { top: 68px; left: 140px; }
