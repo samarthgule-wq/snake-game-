@@ -66,6 +66,10 @@ function getSnakeName(snakeId) {
   return SNAKES.find((snake) => snake.id === snakeId)?.name ?? "Unknown Snake";
 }
 
+function getSnakeById(snakeId) {
+  return SNAKES.find((snake) => snake.id === snakeId) ?? SNAKES[0];
+}
+
 function forbiddenStartZone() {
   const cx = Math.floor(W / 2);
   const cy = Math.floor(H / 2);
@@ -147,6 +151,88 @@ function createObstacles(level) {
       for (let y = 4; y <= 15; y += 1) { if (y !== 9 && y !== 10) add(5, y); if (y !== 6 && y !== 13) add(14, y); }
       for (let x = 5; x <= 14; x += 1) { if (x !== 9 && x !== 10) add(x, 8); if (x !== 7 && x !== 12) add(x, 11); }
       break;
+    case "orbit":
+      [[5, 4], [6, 4], [7, 4], [12, 4], [13, 4], [14, 4], [4, 6], [15, 6], [4, 13], [15, 13], [5, 15], [6, 15], [7, 15], [12, 15], [13, 15], [14, 15]].forEach(([x, y]) => add(x, y));
+      break;
+    case "funnel":
+      for (let y = 2; y <= 16; y += 1) {
+        if (y < 8) { add(3 + y, y); add(16 - y, y); }
+        if (y > 9) { add(y - 3, y); add(19 - y, y); }
+      }
+      break;
+    case "columns":
+      for (let y = 2; y <= 17; y += 1) {
+        if (y !== 5 && y !== 11 && y !== 15) add(4, y);
+        if (y !== 4 && y !== 9 && y !== 14) add(10, y);
+        if (y !== 7 && y !== 12 && y !== 16) add(16, y);
+      }
+      break;
+    case "flowers":
+      [[4, 4], [10, 4], [15, 4], [6, 9], [12, 9], [4, 14], [10, 14], [15, 14]].forEach(([x, y]) => {
+        add(x, y); add(x + 1, y); add(x - 1, y); add(x, y + 1); add(x, y - 1);
+      });
+      break;
+    case "teeth":
+      for (let x = 2; x <= 17; x += 2) {
+        add(x, 4); add(x + 1, 5);
+        add(x, 14); add(x + 1, 13);
+      }
+      break;
+    case "craters":
+      [[4, 4], [8, 5], [13, 4], [16, 7], [5, 10], [10, 10], [14, 12], [7, 15], [12, 15]].forEach(([x, y]) => {
+        add(x, y); add(x + 1, y); add(x, y + 1); add(x + 1, y + 1);
+      });
+      break;
+    case "spine":
+      for (let y = 2; y <= 17; y += 1) if (y !== 9 && y !== 10) add(10, y);
+      for (let x = 4; x <= 16; x += 3) { add(x, 6); add(x, 13); }
+      break;
+    case "crownmaze":
+      for (let x = 3; x <= 16; x += 1) { if (x !== 9 && x !== 10) add(x, 3); if (x !== 6 && x !== 13) add(x, 16); }
+      for (let y = 4; y <= 15; y += 1) { if (y !== 7 && y !== 12) add(3, y); if (y !== 5 && y !== 14) add(16, y); }
+      ["6,6", "7,6", "12,6", "13,6", "6,13", "7,13", "12,13", "13,13", "9,8", "10,8", "9,11", "10,11"].forEach((key) => blocked.add(key));
+      break;
+    case "vault":
+      for (let x = 2; x <= 17; x += 1) {
+        if (![4, 9, 14].includes(x)) add(x, 6);
+        if (![6, 11, 16].includes(x)) add(x, 13);
+      }
+      for (let y = 7; y <= 12; y += 1) { if (y !== 9 && y !== 10) add(9, y); if (y !== 8 && y !== 11) add(12, y); }
+      break;
+    case "rivers":
+      for (let y = 3; y <= 16; y += 1) {
+        if (y !== 8 && y !== 12) add(6, y);
+        if (y !== 5 && y !== 9 && y !== 14) add(12, y);
+      }
+      for (let x = 8; x <= 16; x += 1) if (x !== 10 && x !== 14) add(x, 9);
+      break;
+    case "fortress":
+      for (let x = 4; x <= 15; x += 1) { add(x, 4); add(x, 15); }
+      for (let y = 5; y <= 14; y += 1) { add(4, y); add(15, y); }
+      for (let y = 7; y <= 12; y += 1) { add(8, y); add(11, y); }
+      ["6,6", "13,6", "6,13", "13,13", "9,9", "10,9", "9,10", "10,10"].forEach((key) => blocked.add(key));
+      break;
+    case "corridors":
+      for (let x = 2; x <= 17; x += 1) if (![5, 10, 15].includes(x)) add(x, 5);
+      for (let x = 2; x <= 17; x += 1) if (![4, 9, 14].includes(x)) add(x, 10);
+      for (let x = 2; x <= 17; x += 1) if (![6, 11, 16].includes(x)) add(x, 15);
+      break;
+    case "halo":
+      for (let x = 5; x <= 14; x += 1) { add(x, 5); add(x, 14); }
+      for (let y = 6; y <= 13; y += 1) { add(5, y); add(14, y); }
+      ["8,8", "11,8", "8,11", "11,11"].forEach((key) => blocked.add(key));
+      break;
+    case "catacomb":
+      for (let x = 2; x <= 17; x += 1) { if (![4, 9, 14].includes(x)) add(x, 3); if (![6, 10, 15].includes(x)) add(x, 16); }
+      for (let y = 5; y <= 14; y += 1) { if (![8, 11].includes(y)) add(6, y); if (![6, 9, 12].includes(y)) add(13, y); }
+      for (let x = 6; x <= 13; x += 1) { if (![8, 11].includes(x)) add(x, 9); }
+      break;
+    case "apocalypse":
+      for (let x = 2; x <= 17; x += 1) { if (![5, 14].includes(x)) add(x, 2); if (![4, 9, 15].includes(x)) add(x, 17); }
+      for (let y = 4; y <= 15; y += 1) { if (![7, 12].includes(y)) add(4, y); if (![5, 10, 14].includes(y)) add(15, y); }
+      for (let x = 6; x <= 13; x += 1) { if (![8, 11].includes(x)) add(x, 6); if (![7, 10, 12].includes(x)) add(x, 13); }
+      ["8,9", "9,9", "10,9", "11,9", "8,10", "11,10"].forEach((key) => blocked.add(key));
+      break;
     default:
       break;
   }
@@ -185,6 +271,172 @@ function createGame(level) {
     pulse: 0,
     message: "Press any arrow key or tap Start Run to begin."
   };
+}
+
+function createPreviewObstacles(level) {
+  if (level.obstacleMode.type === "random") {
+    return [
+      { x: 3, y: 3 }, { x: 5, y: 6 }, { x: 8, y: 4 }, { x: 10, y: 7 }, { x: 12, y: 3 },
+      { x: 14, y: 6 }, { x: 16, y: 9 }, { x: 4, y: 11 }, { x: 7, y: 13 }, { x: 11, y: 12 },
+      { x: 14, y: 14 }, { x: 17, y: 5 }
+    ];
+  }
+  return createObstacles(level);
+}
+
+function getHazardColors(level) {
+  switch (level.hazardType) {
+    case "fireball":
+      return { primary: "#ff7c39", secondary: "#ffca63", detail: "#6e1200", preview: "#ff8d4f" };
+    case "snowball":
+      return { primary: "#e9fbff", secondary: "#8cdfff", detail: "#2d5a6f", preview: "#d0f6ff" };
+    case "lightning":
+      return { primary: "#e5d1ff", secondary: "#8fa3ff", detail: "#31285d", preview: "#bdbfff" };
+    case "poison":
+      return { primary: "#b4ff56", secondary: "#51a432", detail: "#173614", preview: "#adff74" };
+    case "crystal":
+      return { primary: "#8ae8ff", secondary: "#f0afff", detail: "#2b305e", preview: "#bde9ff" };
+    case "meteor":
+      return { primary: "#ffb077", secondary: "#754029", detail: "#2a140b", preview: "#e79967" };
+    case "plasma":
+      return { primary: "#82ffe0", secondary: "#54a8ff", detail: "#15395a", preview: "#9afff1" };
+    case "apocalypse":
+      return { primary: "#ffd96b", secondary: "#ff6d4b", detail: "#391a23", preview: "#ffd785" };
+    default:
+      return { primary: "rgba(190, 200, 214, 0.78)", secondary: "rgba(80,92,106,0.95)", detail: "rgba(26,32,39,1)", preview: "rgba(190, 200, 214, 0.78)" };
+  }
+}
+
+function drawHazardCell(ctx, x, y, size, level, pulse) {
+  const colors = getHazardColors(level);
+  const px = x * size;
+  const py = y * size;
+  const inset = size * 0.12;
+  const midX = px + size / 2;
+  const midY = py + size / 2;
+
+  switch (level.hazardType) {
+    case "fireball": {
+      const glow = ctx.createRadialGradient(midX, midY, 2, midX, midY, size * 0.56);
+      glow.addColorStop(0, colors.secondary);
+      glow.addColorStop(0.55, colors.primary);
+      glow.addColorStop(1, colors.detail);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * (0.34 + pulse * 0.04), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255, 240, 194, 0.75)";
+      ctx.beginPath();
+      ctx.arc(midX - size * 0.08, midY - size * 0.08, size * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case "snowball":
+      ctx.fillStyle = colors.primary;
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = colors.secondary;
+      ctx.lineWidth = Math.max(1.2, size * 0.06);
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.18, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    case "lightning":
+      roundRect(ctx, px + inset, py + inset, size - inset * 2, size - inset * 2, size * 0.18);
+      ctx.fillStyle = colors.detail;
+      ctx.fill();
+      ctx.fillStyle = colors.secondary;
+      ctx.beginPath();
+      ctx.moveTo(midX - size * 0.12, py + size * 0.18);
+      ctx.lineTo(midX + size * 0.02, midY - size * 0.02);
+      ctx.lineTo(midX - size * 0.02, midY - size * 0.02);
+      ctx.lineTo(midX + size * 0.12, py + size * 0.82);
+      ctx.lineTo(midX - size * 0.02, midY + size * 0.06);
+      ctx.lineTo(midX + size * 0.02, midY + size * 0.06);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    case "poison":
+      ctx.fillStyle = colors.detail;
+      roundRect(ctx, px + inset, py + inset, size - inset * 2, size - inset * 2, size * 0.22);
+      ctx.fill();
+      ctx.fillStyle = colors.primary;
+      ctx.beginPath();
+      ctx.arc(midX - size * 0.1, midY, size * 0.16, 0, Math.PI * 2);
+      ctx.arc(midX + size * 0.1, midY + size * 0.04, size * 0.14, 0, Math.PI * 2);
+      ctx.arc(midX, midY - size * 0.08, size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    case "crystal":
+      ctx.fillStyle = colors.secondary;
+      ctx.beginPath();
+      ctx.moveTo(midX, py + inset);
+      ctx.lineTo(px + size - inset, midY);
+      ctx.lineTo(midX, py + size - inset);
+      ctx.lineTo(px + inset, midY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = colors.primary;
+      ctx.lineWidth = Math.max(1, size * 0.05);
+      ctx.stroke();
+      break;
+    case "meteor":
+      ctx.fillStyle = colors.secondary;
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = colors.detail;
+      ctx.beginPath();
+      ctx.arc(midX - size * 0.1, midY - size * 0.06, size * 0.08, 0, Math.PI * 2);
+      ctx.arc(midX + size * 0.1, midY + size * 0.1, size * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    case "plasma": {
+      const glow = ctx.createRadialGradient(midX, midY, 1, midX, midY, size * 0.5);
+      glow.addColorStop(0, colors.primary);
+      glow.addColorStop(1, colors.detail);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = colors.secondary;
+      ctx.lineWidth = Math.max(1, size * 0.05);
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.2, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    }
+    case "apocalypse": {
+      const ring = ctx.createRadialGradient(midX, midY, 1, midX, midY, size * 0.46);
+      ring.addColorStop(0, colors.primary);
+      ring.addColorStop(0.45, colors.secondary);
+      ring.addColorStop(1, colors.detail);
+      ctx.fillStyle = ring;
+      ctx.beginPath();
+      ctx.arc(midX, midY, size * 0.34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#c6f8ff";
+      ctx.lineWidth = Math.max(1, size * 0.04);
+      ctx.beginPath();
+      ctx.moveTo(midX, py + inset);
+      ctx.lineTo(midX + size * 0.1, midY);
+      ctx.lineTo(midX, py + size - inset);
+      ctx.lineTo(midX - size * 0.1, midY);
+      ctx.closePath();
+      ctx.stroke();
+      break;
+    }
+    default: {
+      const rock = ctx.createLinearGradient(px, py, px + size, py + size);
+      rock.addColorStop(0, "rgba(255,255,255,0.18)");
+      rock.addColorStop(0.45, "rgba(80,92,106,0.95)");
+      rock.addColorStop(1, "rgba(26,32,39,1)");
+      ctx.fillStyle = rock;
+      roundRect(ctx, px + inset, py + inset, size - inset * 2, size - inset * 2, size * 0.24);
+      ctx.fill();
+    }
+  }
 }
 
 function roundRect(ctx, x, y, width, height, radius) {
@@ -229,13 +481,7 @@ function paintBoard(ctx, level, game, bestScore, skin, options = {}) {
   }
 
   game.obstacles.forEach(({ x, y }) => {
-    const rock = ctx.createLinearGradient(x * CELL, y * CELL, x * CELL + CELL, y * CELL + CELL);
-    rock.addColorStop(0, "rgba(255,255,255,0.18)");
-    rock.addColorStop(0.45, "rgba(80,92,106,0.95)");
-    rock.addColorStop(1, "rgba(26,32,39,1)");
-    ctx.fillStyle = rock;
-    roundRect(ctx, x * CELL + 3, y * CELL + 3, CELL - 6, CELL - 6, 10);
-    ctx.fill();
+    drawHazardCell(ctx, x, y, CELL, level, pulse);
   });
 
   if (game.food) {
@@ -322,10 +568,108 @@ function paintBoard(ctx, level, game, bestScore, skin, options = {}) {
   ctx.fillText(`Best ${bestScore}`, width - 90, 28);
 }
 
+function LevelMapPreview({ level, snake, compact = false }) {
+  const previewObstacles = createPreviewObstacles(level);
+  const previewSnake = compact
+    ? [{ x: 4, y: 13 }, { x: 3, y: 13 }, { x: 2, y: 13 }]
+    : [{ x: 6, y: 13 }, { x: 5, y: 13 }, { x: 4, y: 13 }, { x: 3, y: 13 }];
+  const food = compact ? { x: 14, y: 5 } : { x: 15, y: 4 };
+  const viewBox = `0 0 ${W * 10} ${H * 10}`;
+  const colors = getHazardColors(level);
+
+  return (
+    <div className={`levelPreview ${compact ? "compact" : ""}`}>
+      <svg className="levelPreviewMap" viewBox={viewBox} aria-hidden="true">
+        <defs>
+          <linearGradient id={`preview-bg-${level.id}`} x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop stopColor={level.palette.bgA} />
+            <stop offset="1" stopColor={level.palette.bgB} />
+          </linearGradient>
+          <linearGradient id={`preview-snake-${level.id}`} x1="0" y1="20" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+            <stop stopColor={snake.colors[0]} />
+            <stop offset="0.5" stopColor={snake.colors[1]} />
+            <stop offset="1" stopColor={snake.colors[2]} />
+          </linearGradient>
+        </defs>
+        <rect width={W * 10} height={H * 10} rx="20" fill={`url(#preview-bg-${level.id})`} />
+        {Array.from({ length: H }).flatMap((_, y) =>
+          Array.from({ length: W }).map((__, x) => (
+            <rect
+              key={`cell-${x}-${y}`}
+              x={x * 10 + 1}
+              y={y * 10 + 1}
+              width="8"
+              height="8"
+              rx="2"
+              fill={(x + y) % 2 === 0 ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)"}
+            />
+          ))
+        )}
+        {previewObstacles.map((point) => (
+          <g key={`rock-${point.x}-${point.y}`}>
+            <rect
+              x={point.x * 10 + 1.5}
+              y={point.y * 10 + 1.5}
+              width="7"
+              height="7"
+              rx="2.4"
+              fill={colors.preview}
+              opacity="0.88"
+            />
+            {(level.hazardType === "fireball" || level.hazardType === "snowball" || level.hazardType === "plasma" || level.hazardType === "apocalypse") && (
+              <circle
+                cx={point.x * 10 + 5}
+                cy={point.y * 10 + 5}
+                r="1.7"
+                fill={colors.secondary}
+                opacity="0.9"
+              />
+            )}
+          </g>
+        ))}
+        {previewSnake.map((segment, index) => (
+          <rect
+            key={`snake-${segment.x}-${segment.y}`}
+            x={segment.x * 10 + 1}
+            y={segment.y * 10 + 1}
+            width="8"
+            height="8"
+            rx={index === 0 ? "3.2" : "2.8"}
+            fill={`url(#preview-snake-${level.id})`}
+            stroke={snake.stripe}
+            strokeWidth="0.8"
+          />
+        ))}
+        <circle cx={food.x * 10 + 5} cy={food.y * 10 + 5} r="3.2" fill="#ff5c68" />
+        <path
+          d={`M${food.x * 10 + 5} ${food.y * 10 + 1.7} Q${food.x * 10 + 7.2} ${food.y * 10 + 0.6} ${food.x * 10 + 8.2} ${food.y * 10 - 1.1}`}
+          stroke="#8eff95"
+          strokeWidth="1.1"
+          fill="none"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="levelPreviewSnake">
+        <div
+          className={`snakeSwatch previewSwatch pattern-${snake.pattern} species-${snake.portrait}`}
+          style={{ "--s0": snake.colors[0], "--s1": snake.colors[1], "--s2": snake.colors[2], "--stripe": snake.stripe }}
+        >
+          <SnakePortraitSVG snake={snake} />
+        </div>
+        <div className="levelPreviewCopy">
+          <span>Required Snake</span>
+          <strong>{snake.name}</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function LevelCard({ level, progress, selected, onSelect }) {
   const unlocked = canUnlockLevel(level, progress);
   const cleared = progress.clearedLevels.includes(level.id);
   const requiredSnake = getSnakeName(level.requirements.snakeId);
+  const requiredSnakeData = getSnakeById(level.requirements.snakeId);
   return (
     <button
       className={`levelCard ${selected ? "selected" : ""} ${unlocked ? "" : "locked"}`}
@@ -334,6 +678,7 @@ function LevelCard({ level, progress, selected, onSelect }) {
       onClick={() => unlocked && onSelect(level.id)}
     >
       <div className="levelBadge">Level {level.id}</div>
+      <LevelMapPreview level={level} snake={requiredSnakeData} compact />
       <h3>{level.name}</h3>
       <p>{level.description}</p>
       <div className="levelMeta">
@@ -568,6 +913,7 @@ function MenuScreen({ progress, onStart }) {
 function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay }) {
   const selectedLevel = LEVELS.find((level) => level.id === selectedLevelId) ?? LEVELS[0];
   const requiredSnake = getSnakeName(selectedLevel.requirements.snakeId);
+  const requiredSnakeData = getSnakeById(selectedLevel.requirements.snakeId);
   return (
     <section className="screen levelsScreen">
       <div className="screenHeader">
@@ -592,6 +938,7 @@ function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay
         <div className="selectedCopy">
           <h3>{selectedLevel.name}</h3>
           <p>{selectedLevel.description}</p>
+          <LevelMapPreview level={selectedLevel} snake={requiredSnakeData} />
           <div className="selectedMeta">
             <span>{selectedLevel.theme}</span>
             <span>Goal {selectedLevel.goal}</span>
