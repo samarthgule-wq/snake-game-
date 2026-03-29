@@ -883,6 +883,20 @@ function SnakeCard({ snake, progress, selected, onSelect, onBuy }) {
   );
 }
 
+function CarouselControls({ current, total, onPrev, onNext }) {
+  return (
+    <div className="carouselControls">
+      <button className="carouselArrow" type="button" onClick={onPrev} disabled={current <= 0} aria-label="Previous">
+        ←
+      </button>
+      <div className="carouselCount">{current + 1} / {total}</div>
+      <button className="carouselArrow" type="button" onClick={onNext} disabled={current >= total - 1} aria-label="Next">
+        →
+      </button>
+    </div>
+  );
+}
+
 function MenuScreen({ progress, onStart }) {
   return (
     <section className="screen heroScreen">
@@ -911,6 +925,7 @@ function MenuScreen({ progress, onStart }) {
 }
 
 function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay }) {
+  const selectedIndex = Math.max(0, LEVELS.findIndex((level) => level.id === selectedLevelId));
   const selectedLevel = LEVELS.find((level) => level.id === selectedLevelId) ?? LEVELS[0];
   const requiredSnake = getSnakeName(selectedLevel.requirements.snakeId);
   const requiredSnakeData = getSnakeById(selectedLevel.requirements.snakeId);
@@ -929,10 +944,16 @@ function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay
         <MetricCard icon="/coin-icon.svg" label="Coins" value={progress.coins} />
         <div><span>Best Rank</span><strong>{progress.bestScore}</strong></div>
       </div>
-      <div className="levelsGrid">
-        {LEVELS.map((level) => (
-          <LevelCard key={level.id} level={level} progress={progress} selected={level.id === selectedLevelId} onSelect={onSelectLevel} />
-        ))}
+      <div className="carouselShell">
+        <CarouselControls
+          current={selectedIndex}
+          total={LEVELS.length}
+          onPrev={() => onSelectLevel(LEVELS[Math.max(0, selectedIndex - 1)].id)}
+          onNext={() => onSelectLevel(LEVELS[Math.min(LEVELS.length - 1, selectedIndex + 1)].id)}
+        />
+        <div className="carouselStage">
+          <LevelCard level={selectedLevel} progress={progress} selected onSelect={onSelectLevel} />
+        </div>
       </div>
       <div className="selectedPanel">
         <div className="selectedCopy">
@@ -958,9 +979,17 @@ function LevelsScreen({ progress, selectedLevelId, onSelectLevel, onBack, onPlay
 }
 
 function SnakeCollectionScreen({ level, progress, selectedSkinId, onSelectSkin, onBuySkin, onBack, onStartGame }) {
+  const [browseSnakeId, setBrowseSnakeId] = useState(selectedSkinId);
+
+  useEffect(() => {
+    setBrowseSnakeId(selectedSkinId);
+  }, [selectedSkinId, level.id]);
+
   const requiredSnake = getSnakeName(level.requirements.snakeId);
   const hasRequiredSnake = progress.purchasedSkins.includes(level.requirements.snakeId);
   const usingRequiredSnake = selectedSkinId === level.requirements.snakeId;
+  const browseIndex = Math.max(0, SNAKES.findIndex((snake) => snake.id === browseSnakeId));
+  const browseSnake = SNAKES[browseIndex] ?? SNAKES[0];
   return (
     <section className="screen levelsScreen">
       <div className="screenHeader">
@@ -976,10 +1005,16 @@ function SnakeCollectionScreen({ level, progress, selectedSkinId, onSelectSkin, 
         <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
         <div><span>Coins / Rank</span><strong>{progress.coins} / {progress.bestScore}</strong></div>
       </div>
-      <div className="snakeGrid">
-        {SNAKES.map((snake) => (
-          <SnakeCard key={snake.id} snake={snake} progress={progress} selected={selectedSkinId === snake.id} onSelect={onSelectSkin} onBuy={onBuySkin} />
-        ))}
+      <div className="carouselShell">
+        <CarouselControls
+          current={browseIndex}
+          total={SNAKES.length}
+          onPrev={() => setBrowseSnakeId(SNAKES[Math.max(0, browseIndex - 1)].id)}
+          onNext={() => setBrowseSnakeId(SNAKES[Math.min(SNAKES.length - 1, browseIndex + 1)].id)}
+        />
+        <div className="carouselStage">
+          <SnakeCard snake={browseSnake} progress={progress} selected={selectedSkinId === browseSnake.id} onSelect={onSelectSkin} onBuy={onBuySkin} />
+        </div>
       </div>
       <div className="selectedPanel">
         <div className="selectedCopy">
