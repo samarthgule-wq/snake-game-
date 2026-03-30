@@ -29,13 +29,21 @@ body {
   overflow-x: hidden;
 }
 
+body.gameplayActive {
+  overflow: hidden;
+}
+
 button {
   font: inherit;
 }
 
 .appShell {
-  min-height: 100vh;
-  padding: 24px;
+  min-height: 100dvh;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
 }
 
 .screen {
@@ -63,7 +71,7 @@ button {
 }
 
 .heroScreen {
-  min-height: calc(100vh - 48px);
+  min-height: calc(100dvh - 32px);
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 28px;
@@ -351,6 +359,12 @@ h2 {
 .gameScreen {
   display: grid;
   gap: 22px;
+}
+
+.gameScreen {
+  min-height: calc(100dvh - 32px);
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
 }
 
 .screenHeader {
@@ -737,18 +751,27 @@ h2 {
 
 .gameLayout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
   gap: 22px;
+  align-items: start;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .boardPanel {
   position: relative;
-  padding: 18px;
+  padding: clamp(14px, 2vw, 22px);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  touch-action: none;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .gameCanvas {
-  width: 100%;
-  max-width: 560px;
+  width: min(100%, calc(100dvh - 210px), calc(100dvw - 420px), 760px);
+  aspect-ratio: 1;
   display: block;
   margin: 0 auto;
   border-radius: 24px;
@@ -971,16 +994,57 @@ h2 {
 }
 
 .hudPanel {
-  padding: 18px;
+  padding: 14px;
   display: grid;
-  gap: 12px;
+  gap: 10px;
   align-content: start;
+  position: sticky;
+  top: 16px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.hudSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .controlRow {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.controlButton {
+  min-height: 48px;
+  font-weight: 700;
+  padding: 10px 14px;
+}
+
+.hudPanel .metricCard,
+.hudPanel .hudStat {
+  padding: 12px 14px;
+}
+
+.hudPanel .metricCard {
+  gap: 10px;
+}
+
+.hudPanel .metricIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.hudPanel .metricCard span,
+.hudPanel .hudStat span {
+  font-size: 11px;
+}
+
+.hudPanel .metricCard strong,
+.hudPanel .hudStat strong {
+  margin-top: 4px;
+  font-size: 20px;
 }
 
 .controlsHint kbd {
@@ -995,6 +1059,18 @@ h2 {
   .gameLayout,
   .snakeCard {
     grid-template-columns: 1fr;
+  }
+
+  .hudPanel {
+    position: static;
+  }
+
+  .gameScreen {
+    gap: 16px;
+  }
+
+  .gameCanvas {
+    width: min(100%, calc(100dvh - 250px), 640px);
   }
 
   .levelsGrid,
@@ -1012,7 +1088,17 @@ h2 {
   .boardPanel,
   .hudPanel,
   .selectedPanel {
-    padding: 20px;
+    padding: 14px;
+  }
+
+  .gameCanvas {
+    width: min(100%, calc(100dvh - 235px), calc(100dvw - 34px));
+    border-radius: 18px;
+  }
+
+  .gameOverlay,
+  .eagleScene {
+    inset: 20px;
   }
 
   .heroStats,
@@ -1041,6 +1127,49 @@ h2 {
   .screenHeader {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .hudPanel {
+    gap: 10px;
+  }
+
+  .hudSummaryGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .controlsPanel,
+  .controlsHint {
+    grid-column: auto;
+  }
+
+  .hudStat,
+  .metricCard {
+    padding: 10px;
+  }
+
+  .metricCard strong,
+  .hudStat strong {
+    font-size: 16px;
+  }
+
+  .controlsHint {
+    line-height: 1.45;
+    font-size: 12px;
+    text-align: center;
+    margin: 0;
+  }
+
+  .controlButton {
+    min-height: 42px;
+    padding: 8px 10px;
+  }
+
+  .controlRow {
+    gap: 8px;
+  }
+
+  .controlsPanel {
+    gap: 8px;
   }
 
   .heroArt {
@@ -1076,4 +1205,56 @@ h2 {
   .segment:nth-child(3) { top: 154px; left: 76px; }
   .segment:nth-child(4) { top: 194px; left: 114px; }
   .segment:nth-child(5) { top: 234px; left: 164px; }
+}
+
+@media (max-width: 520px) {
+  .appShell {
+    padding: 12px;
+  }
+
+  .gameScreen {
+    min-height: calc(100dvh - 24px);
+    gap: 12px;
+  }
+
+  .screenHeader {
+    gap: 12px;
+  }
+
+  .gameScreen .headerLogo {
+    display: none;
+  }
+
+  .gameScreen .eyebrow {
+    margin-bottom: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .gameScreen h2 {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+  }
+
+  .gameCanvas {
+    width: min(100%, calc(100dvh - 205px), calc(100dvw - 28px));
+  }
+
+  .overlayCard {
+    width: min(100%, calc(100% - 12px));
+    padding: 18px;
+  }
+
+  .hudPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .hudSummaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .controlButton,
+  .primaryButton,
+  .secondaryButton {
+    min-height: 40px;
+  }
 }
