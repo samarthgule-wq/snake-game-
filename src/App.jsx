@@ -45,6 +45,15 @@ function samePoint(a, b) {
   return a.x === b.x && a.y === b.y;
 }
 
+function getDirectionFromKey(key) {
+  const normalized = key.toLowerCase();
+  if (normalized === "arrowup" || normalized === "w") return { x: 0, y: -1 };
+  if (normalized === "arrowdown" || normalized === "s") return { x: 0, y: 1 };
+  if (normalized === "arrowleft" || normalized === "a") return { x: -1, y: 0 };
+  if (normalized === "arrowright" || normalized === "d") return { x: 1, y: 0 };
+  return null;
+}
+
 function inside({ x, y }) {
   return x >= 0 && x < W && y >= 0 && y < H;
 }
@@ -1038,11 +1047,31 @@ function SnakeCollectionScreen({ level, progress, selectedSkinId, onSelectSkin, 
 
 function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
   const canvasRef = useRef(null);
+  const boardPanelRef = useRef(null);
+  const touchStartRef = useRef(null);
   const [game, setGame] = useState(() => createGame(level));
   const prevScoreRef = useRef(0);
   const prevStatusRef = useRef("ready");
   const lastSoundRef = useRef({ score: 0, status: "ready" });
   const audioRef = useRef({ ctx: null, master: null, unlocked: false });
+
+  function restartRun() {
+    setGame(createGame(level));
+    prevScoreRef.current = 0;
+    prevStatusRef.current = "ready";
+  }
+
+  function queueDirection(direction) {
+    setGame((current) => {
+      if (direction.x === -current.direction.x && direction.y === -current.direction.y) return current;
+      return {
+        ...current,
+        status: current.status === "ready" ? "playing" : current.status,
+        queuedDirection: direction,
+        message: ""
+      };
+    });
+  }
 
   function ensureAudio() {
     if (audioRef.current.ctx) return true;
@@ -1150,33 +1179,68 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
   }, [game.status]);
 
   useEffect(() => {
-    const handleKey = (event) => {
+      const handleKey = (event) => {
       const key = event.key.toLowerCase();
-      const direction = key === "arrowup" || key === "w" ? { x: 0, y: -1 } : key === "arrowdown" || key === "s" ? { x: 0, y: 1 } : key === "arrowleft" || key === "a" ? { x: -1, y: 0 } : key === "arrowright" || key === "d" ? { x: 1, y: 0 } : null;
+      const direction = getDirectionFromKey(key);
       if (!direction) {
         if (key === "r") {
           unlockAudio();
-          setGame(createGame(level));
-          prevScoreRef.current = 0;
-          prevStatusRef.current = "ready";
+          restartRun();
         }
         return;
       }
       event.preventDefault();
       unlockAudio();
-      setGame((current) => {
-        if (direction.x === -current.direction.x && direction.y === -current.direction.y) return current;
-        return {
-          ...current,
-          status: current.status === "ready" ? "playing" : current.status,
-          queuedDirection: direction,
-          message: ""
-        };
-      });
+      queueDirection(direction);
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [level]);
+
+  useEffect(() => {
+    const panel = boardPanelRef.current;
+    if (!panel) return undefined;
+
+    const minimumSwipe = 24;
+
+    const onPointerDown = (event) => {
+      if (event.pointerType === "mouse") return;
+      touchStartRef.current = { x: event.clientX, y: event.clientY };
+    };
+
+    const onPointerUp = (event) => {
+      const start = touchStartRef.current;
+      touchStartRef.current = null;
+      if (!start) return;
+
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < minimumSwipe) return;
+
+      unlockAudio();
+      if (Math.abs(dx) > Math.abs(dy)) {
+        queueDirection(dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
+        return;
+      }
+      queueDirection(dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
+    };
+
+    const clearSwipe = () => {
+      touchStartRef.current = null;
+    };
+
+    panel.addEventListener("pointerdown", onPointerDown);
+    panel.addEventListener("pointerup", onPointerUp);
+    panel.addEventListener("pointercancel", clearSwipe);
+    panel.addEventListener("pointerleave", clearSwipe);
+
+    return () => {
+      panel.removeEventListener("pointerdown", onPointerDown);
+      panel.removeEventListener("pointerup", onPointerUp);
+      panel.removeEventListener("pointercancel", clearSwipe);
+      panel.removeEventListener("pointerleave", clearSwipe);
+    };
+  }, []);
 
   useEffect(() => {
     if (game.status !== "playing" && game.status !== "ready") return undefined;
@@ -1267,18 +1331,6 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
     if (ctx) paintBoard(ctx, level, game, progress.bestScore, skin, { hideSnake: game.status === "caught" });
   }, [game, level, progress.bestScore, skin]);
 
-  const turn = (direction) => {
-    setGame((current) => {
-      if (direction.x === -current.direction.x && direction.y === -current.direction.y) return current;
-      return {
-        ...current,
-        status: current.status === "ready" ? "playing" : current.status,
-        queuedDirection: direction,
-        message: ""
-      };
-    });
-  };
-
   const caughtHead = game.snake[0];
   const eaglePickupStyle = caughtHead
     ? {
@@ -1298,7 +1350,7 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
         <button className="secondaryButton" type="button" onClick={onBackToSnakes}>Snake Collection</button>
       </div>
       <div className="gameLayout">
-        <div className="boardPanel">
+        <div className="boardPanel" ref={boardPanelRef}>
           <canvas ref={canvasRef} width={W * CELL} height={H * CELL} className="gameCanvas" />
           <div className={`gameOverlay ${game.status === "playing" ? "hidden" : ""}`}>
             <div className="overlayCard">
@@ -1316,9 +1368,7 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
                     type="button"
                     onClick={() => {
                       unlockAudio();
-                      setGame(createGame(level));
-                      prevScoreRef.current = 0;
-                      prevStatusRef.current = "ready";
+                      restartRun();
                     }}
                   >
                     Restart
@@ -1340,20 +1390,21 @@ function GameScreen({ level, skin, progress, onBackToSnakes, onRewards }) {
           )}
         </div>
         <aside className="hudPanel">
-          <div className="hudStat"><span>Score</span><strong>{game.score}</strong></div>
-          <MetricCard icon="/coin-icon.svg" label="Coins This Run" value={Math.floor(game.score / 2)} />
-          <MetricCard icon="/apple-icon.svg" label="Total Apples" value={progress.totalApples} />
-          <MetricCard icon="/coin-icon.svg" label="Coins" value={progress.coins} />
-          <div className="hudStat"><span>Snake</span><strong>{skin.name}</strong></div>
-          <div className="controlsPanel">
-            <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 0, y: -1 }); }}>Up</button>
-            <div className="controlRow">
-              <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: -1, y: 0 }); }}>Left</button>
-              <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 1, y: 0 }); }}>Right</button>
-            </div>
-            <button className="secondaryButton" type="button" onClick={() => { unlockAudio(); turn({ x: 0, y: 1 }); }}>Down</button>
+          <div className="hudSummaryGrid">
+            <div className="hudStat"><span>Score</span><strong>{game.score}</strong></div>
+            <MetricCard icon="/coin-icon.svg" label="Run Coins" value={Math.floor(game.score / 2)} />
+            <MetricCard icon="/coin-icon.svg" label="Wallet" value={progress.coins} />
+            <div className="hudStat"><span>Snake</span><strong>{skin.name}</strong></div>
           </div>
-          <p className="controlsHint">Controls: Arrow keys or WASD. Apple count now moves one apple at a time, and coins follow the rule 2 score = 1 coin.</p>
+          <div className="controlsPanel">
+            <button className="secondaryButton controlButton" type="button" onClick={() => { unlockAudio(); queueDirection({ x: 0, y: -1 }); }}>Up</button>
+            <div className="controlRow">
+              <button className="secondaryButton controlButton" type="button" onClick={() => { unlockAudio(); queueDirection({ x: -1, y: 0 }); }}>Left</button>
+              <button className="secondaryButton controlButton" type="button" onClick={() => { unlockAudio(); queueDirection({ x: 1, y: 0 }); }}>Right</button>
+            </div>
+            <button className="secondaryButton controlButton" type="button" onClick={() => { unlockAudio(); queueDirection({ x: 0, y: 1 }); }}>Down</button>
+          </div>
+          <p className="controlsHint">Laptop: Arrow keys or WASD. Android/mobile: swipe or tap.</p>
         </aside>
       </div>
     </section>
@@ -1369,6 +1420,11 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   }, [progress]);
+
+  useEffect(() => {
+    document.body.classList.toggle("gameplayActive", screen === "game");
+    return () => document.body.classList.remove("gameplayActive");
+  }, [screen]);
 
   useEffect(() => {
     if (!progress.purchasedSkins.includes(progress.selectedSkinId)) {
