@@ -23,6 +23,7 @@ const btnUp = document.getElementById("btnUp");
 const btnDown = document.getElementById("btnDown");
 const btnLeft = document.getElementById("btnLeft");
 const btnRight = document.getElementById("btnRight");
+const stageEl = document.querySelector(".stage");
 
 setupCanvas(canvas, GRID_W, GRID_H, CELL);
 
@@ -165,6 +166,11 @@ function setDir(dir) {
   state = setDirection(state, dir);
 }
 
+function swipeToDirection(dx, dy) {
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? Direction.Right : Direction.Left;
+  return dy > 0 ? Direction.Down : Direction.Up;
+}
+
 function keyToDirection(key) {
   switch (key) {
     case "ArrowUp":
@@ -248,6 +254,30 @@ if (btnBack) {
 
 window.addEventListener("keydown", onKeyDown, { passive: false });
 window.addEventListener("pointerdown", unlockAudio, { passive: true, once: true });
+
+if (stageEl) {
+  let swipeStart = null;
+  const minimumSwipe = 24;
+
+  stageEl.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    swipeStart = { x: event.clientX, y: event.clientY };
+  });
+
+  stageEl.addEventListener("pointerup", (event) => {
+    if (!swipeStart) return;
+    const dx = event.clientX - swipeStart.x;
+    const dy = event.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < minimumSwipe) return;
+    setDir(swipeToDirection(dx, dy));
+    unlockAudio();
+  });
+
+  stageEl.addEventListener("pointercancel", () => {
+    swipeStart = null;
+  });
+}
 
 setInterval(() => {
   state = tick(state, Math.random);
