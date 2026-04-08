@@ -26,11 +26,6 @@ body {
     radial-gradient(circle at top left, rgba(68, 149, 101, 0.25), transparent 30%),
     radial-gradient(circle at 80% 20%, rgba(255, 166, 82, 0.2), transparent 25%),
     linear-gradient(180deg, #0b1519 0%, #05090d 100%);
-  overflow-x: hidden;
-}
-
-body.gameplayActive {
-  overflow: hidden;
 }
 
 button {
@@ -38,12 +33,8 @@ button {
 }
 
 .appShell {
-  min-height: 100dvh;
-  padding:
-    max(16px, env(safe-area-inset-top))
-    max(16px, env(safe-area-inset-right))
-    max(16px, env(safe-area-inset-bottom))
-    max(16px, env(safe-area-inset-left));
+  min-height: 100vh;
+  padding: 24px;
 }
 
 .screen {
@@ -51,27 +42,8 @@ button {
   margin: 0 auto;
 }
 
-.heroScreen,
-.levelsScreen {
-  position: relative;
-}
-
-.heroScreen::before,
-.levelsScreen::before {
-  content: "";
-  position: absolute;
-  inset: -30px;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(211, 255, 129, 0.12), transparent 18%),
-    radial-gradient(circle at 82% 18%, rgba(138, 255, 172, 0.1), transparent 16%),
-    radial-gradient(circle at 25% 78%, rgba(255, 201, 127, 0.1), transparent 20%),
-    radial-gradient(circle at 76% 82%, rgba(136, 216, 255, 0.08), transparent 18%);
-  filter: blur(12px);
-  pointer-events: none;
-}
-
 .heroScreen {
-  min-height: calc(100dvh - 32px);
+  min-height: calc(100vh - 48px);
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 28px;
@@ -109,44 +81,22 @@ button {
   z-index: 1;
 }
 
-.creatorBanner {
-  margin-bottom: 14px;
-  font-family: "Orbitron", sans-serif;
-  font-size: clamp(2.2rem, 6vw, 4.8rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: transparent;
-  background:
-    linear-gradient(180deg, #fffef0 0%, #f8da78 42%, #ff9e5c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-shadow:
-    0 3px 0 rgba(0, 0, 0, 0.35),
-    0 18px 36px rgba(255, 184, 93, 0.12);
+.brandLogo,
+.headerLogo {
+  display: block;
+  object-fit: contain;
 }
 
 .brandLogo {
-  width: 154px;
-  height: 154px;
-  display: block;
-  margin-bottom: 18px;
-  filter:
-    drop-shadow(0 20px 40px rgba(144, 255, 130, 0.26))
-    drop-shadow(0 6px 18px rgba(255, 206, 111, 0.18));
-  animation: logo-hover 5.8s ease-in-out infinite;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 12px;
 }
 
 .headerLogo {
-  width: 78px;
-  height: 78px;
-  display: block;
-  margin-bottom: 12px;
-  filter:
-    drop-shadow(0 14px 28px rgba(144, 255, 130, 0.22))
-    drop-shadow(0 4px 10px rgba(255, 206, 111, 0.16));
-  animation: logo-hover 6.4s ease-in-out infinite;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
 }
 
 .eyebrow {
@@ -214,26 +164,8 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.metricCard {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.metricIcon {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 auto;
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
-}
-
 .heroStats span,
 .levelSummary span,
-.metricCard span,
 .hudStat span {
   display: block;
   color: var(--muted);
@@ -244,7 +176,6 @@ h2 {
 
 .heroStats strong,
 .levelSummary strong,
-.metricCard strong,
 .hudStat strong {
   display: block;
   margin-top: 8px;
@@ -361,12 +292,6 @@ h2 {
   gap: 22px;
 }
 
-.gameScreen {
-  min-height: calc(100dvh - 32px);
-  grid-template-rows: auto minmax(0, 1fr);
-  overflow: hidden;
-}
-
 .screenHeader {
   display: flex;
   justify-content: space-between;
@@ -384,119 +309,11 @@ h2 {
   gap: 16px;
 }
 
-.carouselShell {
-  display: grid;
-  gap: 16px;
-}
-
-.carouselControls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.carouselArrow {
-  width: 56px;
-  height: 56px;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-  font-size: 28px;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.carouselArrow:hover:not(:disabled) {
-  transform: translateY(-2px);
-  background: rgba(149, 255, 141, 0.18);
-}
-
-.carouselArrow:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.carouselCount {
-  min-width: 92px;
-  text-align: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-}
-
-.carouselStage {
-  display: grid;
-  justify-items: center;
-}
-
-.carouselStage .levelCard,
-.carouselStage .snakeCard {
-  width: min(880px, 100%);
-}
-
 .levelCard {
   padding: 22px;
   text-align: left;
   color: inherit;
   cursor: pointer;
-}
-
-.levelPreview {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(120px, 0.85fr);
-  gap: 14px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.levelPreview.compact {
-  grid-template-columns: 1fr;
-}
-
-.levelPreviewMap {
-  width: 100%;
-  aspect-ratio: 1;
-  display: block;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.16);
-}
-
-.levelPreviewSnake {
-  display: grid;
-  gap: 10px;
-}
-
-.previewSwatch {
-  height: 112px;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.levelPreviewCopy {
-  display: grid;
-  gap: 4px;
-}
-
-.levelPreviewCopy span {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.levelPreviewCopy strong {
-  font-size: 15px;
 }
 
 .levelCard.selected,
@@ -554,10 +371,6 @@ h2 {
   max-width: 760px;
 }
 
-.selectedCopy .levelPreview {
-  margin: 18px 0 8px;
-}
-
 .snakeGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -575,121 +388,29 @@ h2 {
 .snakeSwatch {
   height: 120px;
   border-radius: 24px;
-  background: linear-gradient(145deg, var(--s0), var(--s1) 50%, var(--s2));
+  background:
+    repeating-linear-gradient(
+      135deg,
+      var(--s0) 0 22px,
+      var(--s1) 22px 44px,
+      var(--s2) 44px 66px
+    );
   position: relative;
   overflow: hidden;
 }
 
-.snakeSwatch::before {
+.snakeSwatch::before,
+.snakeSwatch::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.24), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 40%);
+  inset: 24px 18px;
+  border-radius: 999px;
+  border: 4px solid var(--stripe);
+  opacity: 0.55;
 }
 
-.snakeArtSvg {
-  position: absolute;
-  inset: 8px;
-  width: calc(100% - 16px);
-  height: calc(100% - 16px);
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.22));
-}
-
-.pattern-rings {
-  background:
-    repeating-linear-gradient(90deg, var(--s0) 0 20px, var(--s1) 20px 40px, var(--s2) 40px 58px);
-}
-
-.pattern-bands {
-  background:
-    repeating-linear-gradient(120deg, var(--s0) 0 18px, var(--s1) 18px 36px, var(--s2) 36px 54px);
-}
-
-.pattern-diamond::after,
-.pattern-rosettes::after,
-.pattern-patches::after,
-.pattern-chevron::after,
-.pattern-mosaic::after,
-.pattern-saddle::after,
-.pattern-hood::after,
-.pattern-neon::after,
-.pattern-sleek::after,
-.pattern-smooth::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
-.pattern-diamond::after {
-  background:
-    linear-gradient(135deg, transparent 38%, rgba(0, 0, 0, 0.18) 38% 45%, transparent 45%) 0 0 / 34px 34px,
-    linear-gradient(315deg, transparent 38%, rgba(255, 255, 255, 0.1) 38% 45%, transparent 45%) 0 0 / 34px 34px;
-}
-
-.pattern-rosettes::after {
-  background:
-    radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.22) 0 10%, transparent 11%),
-    radial-gradient(circle at 68% 56%, rgba(255, 255, 255, 0.14) 0 8%, transparent 9%),
-    radial-gradient(circle at 52% 22%, rgba(0, 0, 0, 0.18) 0 8%, transparent 9%);
-}
-
-.pattern-patches::after {
-  background:
-    radial-gradient(circle at 20% 40%, rgba(0, 0, 0, 0.24) 0 12%, transparent 13%),
-    radial-gradient(circle at 70% 32%, rgba(255, 255, 255, 0.12) 0 10%, transparent 11%),
-    radial-gradient(circle at 62% 76%, rgba(0, 0, 0, 0.18) 0 11%, transparent 12%);
-}
-
-.pattern-chevron::after {
-  background:
-    repeating-linear-gradient(135deg, transparent 0 18px, rgba(0, 0, 0, 0.18) 18px 24px, transparent 24px 40px);
-}
-
-.pattern-mosaic::after {
-  background:
-    linear-gradient(45deg, rgba(0, 0, 0, 0.16) 25%, transparent 25%) 0 0 / 26px 26px,
-    linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%) 0 0 / 26px 26px;
-}
-
-.pattern-saddle::after {
-  background:
-    radial-gradient(circle at 30% 50%, rgba(0, 0, 0, 0.18) 0 12%, transparent 13%),
-    radial-gradient(circle at 64% 50%, rgba(0, 0, 0, 0.18) 0 12%, transparent 13%);
-}
-
-.pattern-hood::after {
-  background:
-    radial-gradient(circle at 78% 32%, rgba(255, 255, 255, 0.16) 0 12%, transparent 13%),
-    radial-gradient(circle at 88% 28%, rgba(255, 255, 255, 0.16) 0 11%, transparent 12%);
-}
-
-.pattern-neon::after {
-  background:
-    linear-gradient(90deg, transparent, rgba(186, 255, 140, 0.22), transparent);
-}
-
-.pattern-sleek::after,
-.pattern-smooth::after {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 42%);
-}
-
-.species-cobra .snakeArtSvg {
-  transform: scale(1.04);
-}
-
-.species-anaconda .snakeArtSvg,
-.species-python .snakeArtSvg,
-.species-boa .snakeArtSvg {
-  transform: scale(1.02);
-}
-
-.species-mamba .snakeArtSvg,
-.species-coral .snakeArtSvg,
-.species-seakrait .snakeArtSvg {
-  transform: scale(0.98);
+.snakeSwatch::after {
+  inset: 48px 32px;
 }
 
 .snakeNameRow {
@@ -703,75 +424,20 @@ h2 {
   margin-top: 18px;
 }
 
-.heroScreen .heroPanel,
-.levelsScreen .levelSummary,
-.levelsScreen .selectedPanel,
-.levelsScreen .levelCard,
-.levelsScreen .snakeCard {
-  position: relative;
-  animation: air-float 7.5s ease-in-out infinite;
-}
-
-.heroScreen .heroPanel::after,
-.levelsScreen .levelSummary::after,
-.levelsScreen .selectedPanel::after,
-.levelsScreen .levelCard::after,
-.levelsScreen .snakeCard::after {
-  content: "";
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: -22px;
-  height: 28px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.24), transparent 70%);
-  filter: blur(10px);
-  opacity: 0.65;
-  z-index: -1;
-  animation: air-shadow 7.5s ease-in-out infinite;
-}
-
-.levelsScreen .levelCard:nth-child(odd),
-.levelsScreen .snakeCard:nth-child(odd) {
-  animation-delay: -1.6s;
-}
-
-.levelsScreen .levelCard:nth-child(3n),
-.levelsScreen .snakeCard:nth-child(3n) {
-  animation-delay: -3.2s;
-}
-
-.levelsScreen .selectedPanel {
-  animation-duration: 8.4s;
-}
-
-.levelsScreen .levelSummary {
-  animation-duration: 8s;
-}
-
 .gameLayout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 22px;
-  align-items: start;
-  min-height: 0;
-  overflow: hidden;
 }
 
 .boardPanel {
   position: relative;
-  padding: clamp(14px, 2vw, 22px);
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  touch-action: none;
-  min-height: 0;
-  overflow: hidden;
+  padding: 18px;
 }
 
 .gameCanvas {
-  width: min(100%, calc(100dvh - 210px), calc(100dvw - 420px), 760px);
-  aspect-ratio: 1;
+  width: 100%;
+  max-width: 560px;
   display: block;
   margin: 0 auto;
   border-radius: 24px;
@@ -790,182 +456,6 @@ h2 {
 .gameOverlay.hidden {
   opacity: 0;
   pointer-events: none;
-}
-
-.eagleScene {
-  position: absolute;
-  inset: 18px;
-  overflow: hidden;
-  pointer-events: none;
-  border-radius: 28px;
-}
-
-.eagle {
-  position: absolute;
-  top: 24%;
-  left: -18%;
-  width: 200px;
-  height: 120px;
-  animation: eagle-swoop 1.8s ease-in forwards;
-}
-
-.eaglePickup {
-  width: 180px;
-  height: 110px;
-  transform: translate(-50%, -50%);
-  animation: eagle-grab 1.8s ease-in forwards;
-}
-
-.eagleWing,
-.eagleBody,
-.eagleClaw,
-.eagleSnake {
-  position: absolute;
-  display: block;
-}
-
-.eagleBody {
-  left: 68px;
-  top: 36px;
-  width: 70px;
-  height: 34px;
-  border-radius: 50% 50% 42% 42%;
-  background: linear-gradient(135deg, #f4e7c0, #7a4d1e 52%, #35200d);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
-}
-
-.eagleWing {
-  top: 22px;
-  width: 94px;
-  height: 42px;
-  background: linear-gradient(180deg, #6d4321, #2d1807);
-  border-radius: 90% 10% 70% 20%;
-}
-
-.eagleWingLeft {
-  left: 18px;
-  transform-origin: 90% 50%;
-  animation: wing-flap-left 0.26s ease-in-out infinite alternate;
-}
-
-.eagleWingRight {
-  right: 16px;
-  transform: scaleX(-1);
-  transform-origin: 10% 50%;
-  animation: wing-flap-right 0.26s ease-in-out infinite alternate;
-}
-
-.eagleClaw {
-  left: 98px;
-  top: 66px;
-  width: 18px;
-  height: 28px;
-  border-left: 3px solid #efc85f;
-  border-right: 3px solid #efc85f;
-}
-
-.eagleSnake {
-  left: 88px;
-  top: 88px;
-  width: 54px;
-  height: 14px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #e9ffd3, #70d95e, #24571e);
-  transform: rotate(28deg);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
-}
-
-@keyframes eagle-swoop {
-  0% {
-    transform: translate(-10%, -8%) scale(0.8) rotate(-6deg);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  60% {
-    transform: translate(180%, 72%) scale(1.05) rotate(3deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(360%, -80%) scale(0.78) rotate(-8deg);
-    opacity: 1;
-  }
-}
-
-@keyframes air-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  25% {
-    transform: translate3d(0, -8px, 0);
-  }
-  50% {
-    transform: translate3d(0, -14px, 0);
-  }
-  75% {
-    transform: translate3d(0, -6px, 0);
-  }
-}
-
-@keyframes air-shadow {
-  0%,
-  100% {
-    transform: scaleX(1);
-    opacity: 0.62;
-  }
-  50% {
-    transform: scaleX(0.86);
-    opacity: 0.36;
-  }
-}
-
-@keyframes logo-hover {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-5px) rotate(-2deg);
-  }
-}
-
-@keyframes eagle-grab {
-  0% {
-    transform: translate(-50%, -50%) scale(0.9) rotate(-8deg);
-    opacity: 0;
-  }
-  18% {
-    transform: translate(-70%, -110%) scale(1.05) rotate(-10deg);
-    opacity: 1;
-  }
-  38% {
-    transform: translate(-50%, -50%) scale(1) rotate(2deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(180%, -190%) scale(0.78) rotate(-12deg);
-    opacity: 1;
-  }
-}
-
-@keyframes wing-flap-left {
-  from {
-    transform: rotate(12deg);
-  }
-  to {
-    transform: rotate(-20deg);
-  }
-}
-
-@keyframes wing-flap-right {
-  from {
-    transform: scaleX(-1) rotate(12deg);
-  }
-  to {
-    transform: scaleX(-1) rotate(-20deg);
-  }
 }
 
 .overlayCard {
@@ -994,57 +484,16 @@ h2 {
 }
 
 .hudPanel {
-  padding: 14px;
+  padding: 18px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
   align-content: start;
-  position: sticky;
-  top: 16px;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.hudSummaryGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
 }
 
 .controlRow {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-}
-
-.controlButton {
-  min-height: 48px;
-  font-weight: 700;
-  padding: 10px 14px;
-}
-
-.hudPanel .metricCard,
-.hudPanel .hudStat {
-  padding: 12px 14px;
-}
-
-.hudPanel .metricCard {
-  gap: 10px;
-}
-
-.hudPanel .metricIcon {
-  width: 28px;
-  height: 28px;
-}
-
-.hudPanel .metricCard span,
-.hudPanel .hudStat span {
-  font-size: 11px;
-}
-
-.hudPanel .metricCard strong,
-.hudPanel .hudStat strong {
-  margin-top: 4px;
-  font-size: 20px;
 }
 
 .controlsHint kbd {
@@ -1061,18 +510,6 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  .hudPanel {
-    position: static;
-  }
-
-  .gameScreen {
-    gap: 16px;
-  }
-
-  .gameCanvas {
-    width: min(100%, calc(100dvh - 250px), 640px);
-  }
-
   .levelsGrid,
   .snakeGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1084,21 +521,22 @@ h2 {
     padding: 16px;
   }
 
+  .brandLogo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .headerLogo {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 8px;
+  }
+
   .heroPanel,
   .boardPanel,
   .hudPanel,
   .selectedPanel {
-    padding: 14px;
-  }
-
-  .gameCanvas {
-    width: min(100%, calc(100dvh - 235px), calc(100dvw - 34px));
-    border-radius: 18px;
-  }
-
-  .gameOverlay,
-  .eagleScene {
-    inset: 20px;
+    padding: 20px;
   }
 
   .heroStats,
@@ -1108,68 +546,10 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  .levelPreview,
-  .levelPreview.compact {
-    grid-template-columns: 1fr;
-  }
-
-  .carouselControls {
-    gap: 12px;
-  }
-
-  .carouselArrow {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
-  }
-
   .selectedPanel,
   .screenHeader {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .hudPanel {
-    gap: 10px;
-  }
-
-  .hudSummaryGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .controlsPanel,
-  .controlsHint {
-    grid-column: auto;
-  }
-
-  .hudStat,
-  .metricCard {
-    padding: 10px;
-  }
-
-  .metricCard strong,
-  .hudStat strong {
-    font-size: 16px;
-  }
-
-  .controlsHint {
-    line-height: 1.45;
-    font-size: 12px;
-    text-align: center;
-    margin: 0;
-  }
-
-  .controlButton {
-    min-height: 42px;
-    padding: 8px 10px;
-  }
-
-  .controlRow {
-    gap: 8px;
-  }
-
-  .controlsPanel {
-    gap: 8px;
   }
 
   .heroArt {
@@ -1181,80 +561,9 @@ h2 {
     height: 290px;
   }
 
-  .heroScreen .heroPanel,
-  .levelsScreen .levelSummary,
-  .levelsScreen .selectedPanel,
-  .levelsScreen .levelCard,
-  .levelsScreen .snakeCard,
-  .brandLogo,
-  .headerLogo {
-    animation-duration: 0s;
-    animation-iteration-count: 1;
-  }
-
-  .heroScreen .heroPanel::after,
-  .levelsScreen .levelSummary::after,
-  .levelsScreen .selectedPanel::after,
-  .levelsScreen .levelCard::after,
-  .levelsScreen .snakeCard::after {
-    opacity: 0.44;
-  }
-
   .segment:nth-child(1) { top: 68px; left: 140px; }
   .segment:nth-child(2) { top: 108px; left: 100px; }
   .segment:nth-child(3) { top: 154px; left: 76px; }
   .segment:nth-child(4) { top: 194px; left: 114px; }
   .segment:nth-child(5) { top: 234px; left: 164px; }
-}
-
-@media (max-width: 520px) {
-  .appShell {
-    padding: 12px;
-  }
-
-  .gameScreen {
-    min-height: calc(100dvh - 24px);
-    gap: 12px;
-  }
-
-  .screenHeader {
-    gap: 12px;
-  }
-
-  .gameScreen .headerLogo {
-    display: none;
-  }
-
-  .gameScreen .eyebrow {
-    margin-bottom: 4px;
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-
-  .gameScreen h2 {
-    font-size: clamp(1.2rem, 5vw, 1.5rem);
-  }
-
-  .gameCanvas {
-    width: min(100%, calc(100dvh - 205px), calc(100dvw - 28px));
-  }
-
-  .overlayCard {
-    width: min(100%, calc(100% - 12px));
-    padding: 18px;
-  }
-
-  .hudPanel {
-    grid-template-columns: 1fr;
-  }
-
-  .hudSummaryGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .controlButton,
-  .primaryButton,
-  .secondaryButton {
-    min-height: 40px;
-  }
 }

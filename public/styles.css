@@ -30,6 +30,12 @@ body {
   overflow: hidden;
 }
 
+img[src$="snake-realms-logo.svg"] {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
 .landing {
   min-height: 100%;
   display: grid;
